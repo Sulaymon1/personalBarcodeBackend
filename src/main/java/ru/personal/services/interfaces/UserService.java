@@ -10,6 +10,11 @@ import ru.personal.models.User;
  **/
 public interface UserService {
     void saveUser(User user);
+
+    Boolean updateUsername(String token, String username);
+
     User getUserByToken(String token);
-    void updateUsername(String token, String username, String name, String file);
+    void updateUser(String token, String username, String name, String file);
+
+    boolean hasUsername(String username);
 }

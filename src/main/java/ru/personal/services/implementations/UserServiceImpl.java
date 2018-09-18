@@ -41,6 +41,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean updateUsername(String token, String username){
+        User user = getUserByToken(token);
+        if (hasUsername(username)){
+            user.setUsername(username);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public User getUserByToken(String token) {
         log.info("got token");
         User userFromToken = jwtTokenUtil.getUserFromToken(token);
@@ -48,7 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUsername(String token, String username, String name, String imageBytes) {
+    public void updateUser(String token, String username, String name, String imageBytes) {
         User userT = jwtTokenUtil.getUserFromToken(token);
         User user = userRepository.findFirstByPhoneNumber(userT.getPhoneNumber());
         if (username != null){
@@ -62,6 +73,11 @@ public class UserServiceImpl implements UserService {
             user.setPicName(imageName);
         }else throw new IllegalArgumentException("Error nothing to update");
         userRepository.save(user);
+    }
+
+    @Override
+    public boolean hasUsername(String username) {
+        return !userRepository.findUserByUsername(username).isPresent();
     }
 
     @PostMapping("/updatePic")
