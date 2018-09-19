@@ -62,8 +62,8 @@ public class UserRestController {
 
     @PostMapping("/updateUsername")
     public ResponseEntity<Map<String, Boolean>> saveUsername(@RequestParam String token,
-                                                             @RequestParam String username){
-        return ResponseEntity.ok(Collections.singletonMap("answer", userService.updateUsername(token, username)));
+                                                             @RequestParam String username, @RequestParam String imageBytes){
+        return ResponseEntity.ok(Collections.singletonMap("answer", userService.updateUsername(token, username, imageBytes)));
     }
 }
 

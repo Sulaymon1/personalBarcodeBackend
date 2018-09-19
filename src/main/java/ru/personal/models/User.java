@@ -31,6 +31,7 @@ public class User {
     private String phoneNumber;
     @Column(unique = true)
     private String username;
+    private String qrImagePath;
     private String name;
     private Long pin;
     private String picName;

@@ -41,10 +41,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean updateUsername(String token, String username){
+    public Boolean updateUsername(String token, String username, String imageBytes){
         User user = getUserByToken(token);
         if (hasUsername(username)){
             user.setUsername(username);
+            String imageName = fileInfoService.savePicture(imageBytes);
+            user.setQrImagePath(imageName);
             userRepository.save(user);
             return true;
         }
