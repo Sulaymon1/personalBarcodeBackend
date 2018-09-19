@@ -49,7 +49,7 @@ public class UserRestController {
         fileInfoService.getPicture(fileName, response);
     }
 
-    @GetMapping("/checkUsername")
+    @PostMapping("/checkUsername")
     public ResponseEntity<Map<String, Boolean>> checkUsername(@RequestParam String token,
                                                  @RequestParam String username){
         User user = jwtTokenUtil.getUserFromToken(token);
@@ -60,7 +60,7 @@ public class UserRestController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/updateUsername")
+    @PostMapping("/updateUsername")
     public ResponseEntity<Map<String, Boolean>> saveUsername(@RequestParam String token,
                                                              @RequestParam String username){
         return ResponseEntity.ok(Collections.singletonMap("answer", userService.updateUsername(token, username)));
