@@ -8,6 +8,7 @@ import ru.personal.form.UserForm;
 import ru.personal.models.Token;
 import ru.personal.models.User;
 import ru.personal.services.interfaces.AuthenticationService;
+import ru.personal.services.interfaces.FileInfoService;
 import ru.personal.services.interfaces.UserService;
 
 import java.util.HashMap;
@@ -23,6 +24,9 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private FileInfoService fileInfoService;
+
     // TODO: 19.09.2018 write it correctly
     @PostMapping(value = "/login")
     public ResponseEntity<?> login(@RequestParam(name = "phone") String phone, @RequestParam("pincode")String pincode){
@@ -34,6 +38,7 @@ public class AuthController {
         User user = userService.getUserByToken(token.getToken());
         map.put("token", token.getToken());
         map.put("username", user.getUsername());
+        map.put("qrImage",fileInfoService.getImageBase64(user.getPicName()));
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 

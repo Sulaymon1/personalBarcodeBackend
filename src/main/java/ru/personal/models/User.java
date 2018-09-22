@@ -5,6 +5,7 @@ import lombok.*;
 import ru.personal.security.role.Role;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -29,12 +30,16 @@ public class User {
 
     @Column(unique = true)
     private String phoneNumber;
+
     @Column(unique = true)
     private String username;
     private String qrImagePath;
     private String name;
+    private String lastName;
     private Long pin;
     private String picName;
+    @Column(columnDefinition = "date")
+    private LocalDate birthday;
 
 
     @Enumerated(EnumType.STRING)

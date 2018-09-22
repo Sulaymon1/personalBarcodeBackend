@@ -1,5 +1,6 @@
 package ru.personal.services.implementations;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.personal.services.interfaces.FileInfoService;
@@ -9,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Base64;
 import java.util.UUID;
 
 @Service
@@ -32,6 +34,18 @@ public class FileInfoServiceImpl implements FileInfoService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String getImageBase64(String fileName){
+        String encodedString = null;
+        try {
+            byte[] bytes = FileUtils.readFileToByteArray(new File(path + fileName + ".jpeg"));
+            encodedString = Base64.getEncoder().encodeToString(bytes);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return encodedString;
     }
 
     @Override

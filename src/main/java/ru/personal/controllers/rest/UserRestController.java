@@ -1,6 +1,7 @@
 package ru.personal.controllers.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,10 @@ import ru.personal.services.interfaces.FileInfoService;
 import ru.personal.services.interfaces.UserService;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -37,12 +41,7 @@ public class UserRestController {
         return ResponseEntity.ok(userService.getUserByToken(token));
     }
 
-    @PostMapping(value = "/updateUser")
-    public ResponseEntity updateUsername(@RequestParam String token, @RequestParam(required = false) String username,
-                                         @RequestParam(required = false) String name, @RequestParam(required = false)String imageBytes){
-        userService.updateUser(token, username,name, imageBytes);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
+
 
     @GetMapping("/photo/{fileName:.+}")
     public void getPhoto(@PathVariable("fileName") String fileName, HttpServletResponse response){
@@ -61,10 +60,19 @@ public class UserRestController {
     }
 
     @PostMapping("/updateUsername")
-    public ResponseEntity<Map<String, Boolean>> saveUsername(@RequestParam String token,
+    public ResponseEntity<Map<String, Boolean>> updateUsername(@RequestParam String token,
                                                              @RequestParam String username, @RequestParam String qrImage){
         return ResponseEntity.ok(Collections.singletonMap("answer", userService.updateUsername(token, username, qrImage)));
     }
+
+    @PostMapping("/updateUserInfo")
+    public ResponseEntity<?> updateUserInfo(@RequestParam String token,
+                                             @RequestParam(required = false) String name,
+                                             @RequestParam(required = false) String lastname, // 2018-09-22
+                                             @RequestParam(required = false) @DateTimeFormat( iso = DateTimeFormat.ISO.DATE) LocalDate date){
+        userService.updateUserInfo(token, name, lastname, date);
+        return ResponseEntity.ok().build();
+
+    }
 }
 
-// eyJhbGciOiJIUzUxMiJ9.eyJwaG9uZU51bWJlciI6IjEyMyIsInJvbGUiOiJVU0VSIiwic3ViIjoiMSIsImlhdCI6MTUzNzI5MzgwOSwiZXhwIjoxNTM3ODk4NjA5fQ.grt0tBofTq_MxhlzdSPAQ6UYJu0AOKwxsBZFRE4_ViaaHXxngCn2j4sRKYHBRV8VO_dxDvDw_l_s6NPRzxE4xA

@@ -2,6 +2,8 @@ package ru.personal.services.interfaces;
 
 import ru.personal.models.User;
 
+import java.time.LocalDate;
+
 /**
  * Date 03.07.2018
  *
@@ -17,4 +19,6 @@ public interface UserService {
     void updateUser(String token, String username, String name, String file);
 
     boolean hasUsername(String username);
+
+    void updateUserInfo(String token, String name, String lastname, LocalDate date);
 }

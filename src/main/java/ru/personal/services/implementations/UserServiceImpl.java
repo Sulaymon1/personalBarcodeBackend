@@ -11,6 +11,8 @@ import ru.personal.security.JwtTokenUtil;
 import ru.personal.services.interfaces.FileInfoService;
 import ru.personal.services.interfaces.UserService;
 
+import java.time.LocalDate;
+
 /**
  * Date 03.07.2018
  *
@@ -77,9 +79,26 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+
+
     @Override
     public boolean hasUsername(String username) {
         return !userRepository.findUserByUsername(username).isPresent();
+    }
+
+    @Override
+    public void updateUserInfo(String token, String name, String lastname, LocalDate birthday) {
+        User user = jwtTokenUtil.getUserFromToken(token);
+        user = userRepository.findFirstByPhoneNumber(user.getPhoneNumber());
+        if (name != null){
+            user.setName(name);
+        }
+        if (lastname != null){
+            user.setLastName(lastname);
+        }
+        if (birthday != null){
+            user.setBirthday(birthday);
+        }
     }
 
     @PostMapping("/updatePic")
