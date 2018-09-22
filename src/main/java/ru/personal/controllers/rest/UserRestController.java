@@ -42,7 +42,7 @@ public class UserRestController {
 
 
 
-    @PostMapping("/photo/{fileName:.+}")
+    @GetMapping("/photo/{fileName:.+}")
     public void getPhoto(@PathVariable("fileName") String fileName, HttpServletResponse response){
         fileInfoService.getProfilePhoto(fileName, response);
     }
