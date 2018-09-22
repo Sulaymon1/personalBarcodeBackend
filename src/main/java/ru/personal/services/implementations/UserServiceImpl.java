@@ -99,6 +99,7 @@ public class UserServiceImpl implements UserService {
         if (birthday != null){
             user.setBirthday(birthday);
         }
+        userRepository.save(user);
     }
 
     @PostMapping("/updatePic")
