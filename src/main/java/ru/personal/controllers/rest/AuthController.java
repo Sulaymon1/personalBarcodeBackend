@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.personal.constants.Image;
 import ru.personal.form.UserForm;
 import ru.personal.models.Token;
 import ru.personal.models.User;
@@ -38,7 +39,7 @@ public class AuthController {
         User user = userService.getUserByToken(token.getToken());
         map.put("token", token.getToken());
         map.put("username", user.getUsername());
-        map.put("qrImage",fileInfoService.getImageBase64(user.getPicName()));
+        map.put("qrImage",fileInfoService.getImageBase64(user.getProfilePhotoPath(), Image.QRimage));
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 

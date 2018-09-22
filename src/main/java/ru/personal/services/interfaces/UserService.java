@@ -13,10 +13,9 @@ import java.time.LocalDate;
 public interface UserService {
     void saveUser(User user);
 
-    Boolean updateUsername(String token, String username, String imageBytes);
+    Boolean updateUsername(String token, String username, String qrImage);
 
     User getUserByToken(String token);
-    void updateUser(String token, String username, String name, String file);
 
     boolean hasUsername(String username);
 

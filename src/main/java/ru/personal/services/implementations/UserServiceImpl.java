@@ -3,6 +3,7 @@ package ru.personal.services.implementations;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.personal.constants.Image;
 import ru.personal.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,11 +44,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean updateUsername(String token, String username, String imageBytes){
+    public Boolean updateUsername(String token, String username, String qrImage){
         User user = getUserByToken(token);
         if (hasUsername(username)){
             user.setUsername(username);
-            String imageName = fileInfoService.savePicture(imageBytes);
+            String imageName = fileInfoService.savePicture(qrImage, Image.QRimage);
             user.setQrImagePath(imageName);
             userRepository.save(user);
             return true;
@@ -62,22 +63,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findFirstByPhoneNumber(userFromToken.getPhoneNumber());
     }
 
-    @Override
-    public void updateUser(String token, String username, String name, String imageBytes) {
-        User userT = jwtTokenUtil.getUserFromToken(token);
-        User user = userRepository.findFirstByPhoneNumber(userT.getPhoneNumber());
-        if (username != null){
-            if (!userRepository.findUserByUsername(username).isPresent()){
-                user.setUsername(username);
-            }else throw new IllegalArgumentException("Error1");
-        }else if (name != null){
-            user.setName(name);
-        }else if (imageBytes != null){
-            String imageName = fileInfoService.savePicture(imageBytes);
-            user.setPicName(imageName);
-        }else throw new IllegalArgumentException("Error nothing to update");
-        userRepository.save(user);
-    }
+
 
 
 

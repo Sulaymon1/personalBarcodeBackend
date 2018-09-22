@@ -2,9 +2,9 @@ package ru.personal.controllers.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.personal.constants.Image;
 import ru.personal.models.User;
 import ru.personal.security.JwtTokenUtil;
 import ru.personal.services.interfaces.FileInfoService;
@@ -12,9 +12,8 @@ import ru.personal.services.interfaces.UserService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -43,9 +42,29 @@ public class UserRestController {
 
 
 
-    @GetMapping("/photo/{fileName:.+}")
+    @PostMapping("/photo/{fileName:.+}")
     public void getPhoto(@PathVariable("fileName") String fileName, HttpServletResponse response){
-        fileInfoService.getPicture(fileName, response);
+        fileInfoService.getProfilePhoto(fileName, response);
+    }
+
+    @PostMapping("/qrImage/{fileName:.+}")
+    public ResponseEntity<?> getQRImage(@PathVariable("fileName") String fileName){
+        String imageBase64 = fileInfoService.getImageBase64(fileName, Image.QRimage);
+        Map<String, String> map = new HashMap<>();
+        map.put("qrImage",imageBase64);
+        return ResponseEntity.ok(map);
+    }
+
+    @PostMapping("/uploadPhoto")
+    public ResponseEntity uploadPhoto(@RequestParam String token,
+                                      @RequestParam String profilePhotoBase64){
+        User user = userService.getUserByToken(token);
+        if (user != null){
+            String pictureName = fileInfoService.savePicture(profilePhotoBase64, Image.Photo);
+            user.setProfilePhotoPath(pictureName);
+            userService.saveUser(user);
+        }
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/checkUsername")
@@ -74,5 +93,7 @@ public class UserRestController {
         return ResponseEntity.ok().build();
 
     }
+
+
 }
 

@@ -1,5 +1,6 @@
 package ru.personal.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import ru.personal.security.role.Role;
@@ -37,8 +38,9 @@ public class User {
     private String name;
     private String lastName;
     private Long pin;
-    private String picName;
+    private String profilePhotoPath;
     @Column(columnDefinition = "date")
+    @JsonFormat(pattern = "YYYY-dd-MM")
     private LocalDate birthday;
 
 
