@@ -31,7 +31,7 @@ public class FileInfoServiceImpl implements FileInfoService {
                 if (image.equals(Image.Photo)) {
                     bytes = FileUtils.readFileToByteArray(new File(photoPath + fileName + ".jpeg"));
                 }else if (image.equals(Image.QRimage)){
-                    bytes = FileUtils.readFileToByteArray(new File(photoPath + fileName + ".jpeg"));
+                    bytes = FileUtils.readFileToByteArray(new File(qrImagePath + fileName + ".jpeg"));
                 }
                 encodedString = Base64.getEncoder().encodeToString(bytes);
             }catch (Exception e){
