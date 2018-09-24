@@ -79,7 +79,7 @@ public class UserRestController {
         fileInfoService.getPhoto(fileName, photoType , response);
     }
 
-    @GetMapping("/removeImage")
+    @PostMapping("/removeImage")
     public ResponseEntity removeImage(@RequestParam String photoType,@RequestParam String token){
         User user = userService.getUserByToken(token);
         if (user != null){
