@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.personal.constants.Image;
+import ru.personal.models.User;
 import ru.personal.services.interfaces.FileInfoService;
 import sun.misc.BASE64Decoder;
 
@@ -11,6 +12,8 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -88,6 +91,26 @@ public class FileInfoServiceImpl implements FileInfoService {
                 response.flushBuffer();
                 is.close();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void removePhoto(User user, String imageType){
+        String path = null;
+        String fileName = null;
+        if (imageType.equals("coverPhoto")){
+            path = coverPhotoPath;
+            fileName = user.getCoverPhotoPath();
+            user.setCoverPhotoPath(null);
+        }else if (imageType.equals("profilePhoto")){
+            path = photoPath;
+            fileName = user.getProfilePhotoPath();
+            user.setProfilePhotoPath(null);
+        }
+        try {
+            Files.deleteIfExists(Paths.get(path + fileName + ".jpeg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
