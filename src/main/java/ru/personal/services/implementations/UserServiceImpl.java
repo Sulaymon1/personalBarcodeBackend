@@ -60,7 +60,11 @@ public class UserServiceImpl implements UserService {
     public User getUserByToken(String token) {
         log.info("got token");
         User userFromToken = jwtTokenUtil.getUserFromToken(token);
-        return userRepository.findFirstByPhoneNumber(userFromToken.getPhoneNumber());
+        User user = userRepository.findFirstByPhoneNumber(userFromToken.getPhoneNumber());
+        if (user == null){
+            throw new IllegalArgumentException("user not found");
+        }
+        return user;
     }
 
 
