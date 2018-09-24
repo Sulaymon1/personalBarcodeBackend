@@ -34,11 +34,12 @@ public class User {
 
     @Column(unique = true)
     private String username;
-    private String qrImagePath;
     private String name;
     private String lastName;
     private Long pin;
     private String profilePhotoPath;
+    private String qrImagePath;
+    private String coverPhotoPath;
     @Column(columnDefinition = "date")
     @JsonFormat(pattern = "YYYY-dd-MM")
     private LocalDate birthday;

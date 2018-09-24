@@ -42,11 +42,6 @@ public class UserRestController {
 
 
 
-    @GetMapping("/photo/{fileName:.+}")
-    public void getPhoto(@PathVariable("fileName") String fileName, HttpServletResponse response){
-        fileInfoService.getProfilePhoto(fileName, response);
-    }
-
     @PostMapping("/qrImage/{fileName:.+}")
     public ResponseEntity<?> getQRImage(@PathVariable("fileName") String fileName){
         String imageBase64 = fileInfoService.getImageBase64(fileName, Image.QRimage);
@@ -65,6 +60,23 @@ public class UserRestController {
             userService.saveUser(user);
         }
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/uploadCoverPhoto")
+    public ResponseEntity uploadCoverPhoto(@RequestParam String token,
+                                           @RequestParam String coverPhotoBase64){
+        User user = userService.getUserByToken(token);
+        if (user != null) {
+            String coverPictureName = fileInfoService.savePicture(coverPhotoBase64, Image.CoverPhoto);
+            user.setCoverPhotoPath(coverPictureName);
+            userService.saveUser(user);
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/getImage/{photoType}/{fileName:.+}")
+    public void getCoverPhoto(@PathVariable("photoType") String photoType, @PathVariable("fileName") String fileName, HttpServletResponse response){
+        fileInfoService.getPhoto(fileName, photoType , response);
     }
 
     @PostMapping("/checkUsername")

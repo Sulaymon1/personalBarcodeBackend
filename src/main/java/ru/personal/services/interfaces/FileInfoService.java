@@ -13,5 +13,5 @@ public interface FileInfoService {
 
     String savePicture(String imageBytes, Image imageType);
 
-    void getProfilePhoto(String fileName, HttpServletResponse response);
+    void getPhoto(String fileName, String photoType, HttpServletResponse response);
 }

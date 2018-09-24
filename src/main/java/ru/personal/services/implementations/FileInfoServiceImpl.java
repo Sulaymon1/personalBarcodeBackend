@@ -23,6 +23,9 @@ public class FileInfoServiceImpl implements FileInfoService {
     @Value("${storage.qrImagePath}")
     private String qrImagePath;
 
+    @Value("${storage.coverPhotoPath}")
+    private String coverPhotoPath;
+
     @Override
     public String getImageBase64(String fileName, Image image){
         String encodedString = null;
@@ -32,6 +35,8 @@ public class FileInfoServiceImpl implements FileInfoService {
                     bytes = FileUtils.readFileToByteArray(new File(photoPath + fileName + ".jpeg"));
                 }else if (image.equals(Image.QRimage)){
                     bytes = FileUtils.readFileToByteArray(new File(qrImagePath + fileName + ".jpeg"));
+                }else if (image.equals(Image.CoverPhoto)){
+                    bytes = FileUtils.readFileToByteArray(new File(coverPhotoPath + fileName + ".jpeg"));
                 }
                 encodedString = Base64.getEncoder().encodeToString(bytes);
             }catch (Exception e){
@@ -66,9 +71,15 @@ public class FileInfoServiceImpl implements FileInfoService {
     }
 
     @Override
-    public void getProfilePhoto(String fileName, HttpServletResponse response) {
+    public void getPhoto(String fileName, String photoType, HttpServletResponse response) {
         try {
-            File file = new File(photoPath + fileName + ".jpeg");
+            File file = null;
+            if (photoType.equals("profilePhoto")){
+               file = new File(photoPath + fileName + ".jpeg");
+            }
+            else if (photoType.equals("coverPhoto")){
+                file = new File(coverPhotoPath + fileName + ".jpeg");
+            }
             if (file.exists()) {
                 InputStream is;
                 is = new FileInputStream(file);

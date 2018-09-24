@@ -7,5 +7,5 @@ package ru.personal.constants;
  * @version v1.0
  **/
 public enum Image {
-    Photo, QRimage
+    Photo, QRimage, CoverPhoto
 }
