@@ -41,7 +41,7 @@ public class User {
     private String qrImagePath;
     private String coverPhotoPath;
     @Column(columnDefinition = "date")
-    @JsonFormat(pattern = "YYYY-dd-MM")
+    @JsonFormat(pattern = "YYYY-MM-dd")
     private LocalDate birthday;
 
 

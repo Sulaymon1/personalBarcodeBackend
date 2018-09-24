@@ -35,8 +35,6 @@ public class FileInfoServiceImpl implements FileInfoService {
                     bytes = FileUtils.readFileToByteArray(new File(photoPath + fileName + ".jpeg"));
                 }else if (image.equals(Image.QRimage)){
                     bytes = FileUtils.readFileToByteArray(new File(qrImagePath + fileName + ".jpeg"));
-                }else if (image.equals(Image.CoverPhoto)){
-                    bytes = FileUtils.readFileToByteArray(new File(coverPhotoPath + fileName + ".jpeg"));
                 }
                 encodedString = Base64.getEncoder().encodeToString(bytes);
             }catch (Exception e){
@@ -59,6 +57,8 @@ public class FileInfoServiceImpl implements FileInfoService {
                 file = new File(photoPath + newFileName + ".jpeg");
             }else if (imageType.equals(Image.QRimage)){
                 file = new File(qrImagePath + newFileName + ".jpeg");
+            }else if (imageType.equals(Image.CoverPhoto)){
+                file = new File(coverPhotoPath + newFileName + ".jpeg");
             }
             file.mkdir();
             ImageIO.write(image, "jpeg", file);
