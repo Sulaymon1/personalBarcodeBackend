@@ -12,14 +12,8 @@ import lombok.Setter;
  **/
 @Setter
 @Getter
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class VkUser {
-    @JsonProperty("first_name")
-    private String firstName;
-    @JsonProperty("last_name")
-    private String lastName;
-    @JsonProperty("photo_100")
+    private String fullName;
     private String profilePhoto;
-    @JsonProperty("last_seen")
-    private VkTime lastSeen;
+    private String lastSeen;
 }
