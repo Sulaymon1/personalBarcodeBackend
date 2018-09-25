@@ -1,11 +1,8 @@
 package ru.personal.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import ru.personal.dto.SocialNetworkData;
-import ru.personal.dto.Vkontakte.VkUser;
+import ru.personal.dto.Vkontakte.SocialUser;
 import ru.personal.models.SocialNetwork;
 import ru.personal.models.User;
 import ru.personal.repositories.UserRepository;
@@ -27,23 +24,17 @@ public class SocialNetworkServiceImpl implements SocialNetworkService {
     @Autowired
     private ParserService parserService;
 
-    private VkUser getVk(String profileId) {
-       return parserService.parseVK(profileId);
-    }
 
-    private void getFB(User user, String profileId) {
-
-    }
 
     @Override
-    public SocialNetworkData getInfo(User user){
-        SocialNetworkData socialNetworkData = new SocialNetworkData();
+    public SocialUser getInfo(User user){
         SocialNetwork socialNetwork = user.getSocialNetwork();
         String vkId = socialNetwork.getVkId();
-        System.out.println(vkId);
-        VkUser vk = getVk(vkId);
-        socialNetworkData.setVkUser(vk);
-        return socialNetworkData;
+        String fbId = socialNetwork.getFbId();
+        parserService.setSocialUser(new SocialUser());
+        parserService.parseVK(vkId);
+        parserService.parseFB(fbId);
+        return parserService.getSocialUser();
     }
 
     @Override

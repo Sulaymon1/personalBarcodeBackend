@@ -1,10 +1,12 @@
 package ru.personal.services.implementations;
 
+import org.jsoup.Connection;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-import ru.personal.dto.Vkontakte.VkUser;
+import ru.personal.dto.Vkontakte.SocialUser;
 import ru.personal.services.interfaces.ParserService;
 
 import java.io.IOException;
@@ -18,9 +20,21 @@ import java.io.IOException;
 @Service
 public class ParserServiceImpl implements ParserService {
 
+    @Override
+    public SocialUser getSocialUser() {
+        return socialUser;
+    }
 
     @Override
-    public VkUser parseVK(String profileId) {
+    public void setSocialUser(SocialUser socialUser) {
+        this.socialUser = socialUser;
+    }
+
+    private SocialUser socialUser;
+
+
+    @Override
+    public void parseVK(String profileId) {
         try {
             String url = "https://vk.com/"+profileId;
             Document document = Jsoup.connect(url).get();
@@ -35,14 +49,35 @@ public class ParserServiceImpl implements ParserService {
                 }
                 avatarImgUrl = document.getElementsByClass("page_avatar_img").get(0).attr("src");
             }
-            VkUser vkUser = new VkUser();
-            vkUser.setFullName(fullName);
-            vkUser.setLastSeen(lastSeen);
-            vkUser.setProfilePhoto(avatarImgUrl);
-            return vkUser;
+            socialUser.getFullName().add(fullName);
+            socialUser.getLastSeen().add(lastSeen);
+            socialUser.getProfilePhoto().add(avatarImgUrl);
+            socialUser.getId().add(profileId);
+            socialUser.getSocialType().add("vk");
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
         }
+    }
+
+    @Override
+    public void parseFB(String profileId) {
+        String url = "https://www.facebook.com/" + profileId;
+        String fullName = null;
+        String avatarImgUrl = null;
+        try {
+            Document document = Jsoup.connect(url).get();
+            Elements isClosedPage = document.getElementsByClass("_585r _50f4");
+            if (isClosedPage.isEmpty()) {
+                fullName = document.getElementsByClass("_2nlw _2nlv").get(0).text();
+                avatarImgUrl = document.getElementsByClass("_11kf img").get(0).attr("src");
+            }
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        socialUser.getSocialType().add("fb");
+        socialUser.getId().add(profileId);
+        socialUser.getLastSeen().add(null);
+        socialUser.getFullName().add(fullName);
+        socialUser.getProfilePhoto().add(avatarImgUrl);
     }
 }

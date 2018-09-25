@@ -1,6 +1,6 @@
 package ru.personal.services.interfaces;
 
-import ru.personal.dto.Vkontakte.VkUser;
+import ru.personal.dto.Vkontakte.SocialUser;
 
 /**
  * Date 25.09.2018
@@ -9,5 +9,10 @@ import ru.personal.dto.Vkontakte.VkUser;
  * @version v1.0
  **/
 public interface ParserService {
-    VkUser parseVK(String url);
+    SocialUser getSocialUser();
+
+    void setSocialUser(SocialUser socialUser);
+
+    void parseVK(String profileId);
+    void parseFB(String profileId);
 }

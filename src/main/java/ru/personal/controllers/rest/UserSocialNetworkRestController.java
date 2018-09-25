@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.personal.dto.SocialNetworkData;
+import ru.personal.dto.Vkontakte.SocialUser;
 import ru.personal.models.User;
 import ru.personal.services.interfaces.SocialNetworkService;
 import ru.personal.services.interfaces.UserService;
@@ -35,7 +35,7 @@ public class UserSocialNetworkRestController {
     }
 
     @PostMapping("/get")
-    public ResponseEntity<SocialNetworkData> getStatusInfo(@RequestParam String token){
+    public ResponseEntity<SocialUser> getStatusInfo(@RequestParam String token){
         User user = userService.getUserByToken(token);
         return ResponseEntity.ok( socialNetworkService.getInfo(user));
     }

@@ -1,6 +1,6 @@
 package ru.personal.services.interfaces;
 
-import ru.personal.dto.SocialNetworkData;
+import ru.personal.dto.Vkontakte.SocialUser;
 import ru.personal.models.User;
 
 /**
@@ -11,7 +11,7 @@ import ru.personal.models.User;
  **/
 public interface SocialNetworkService {
 
-    SocialNetworkData getInfo(User user);
+    SocialUser getInfo(User user);
 
     void add(User user, String profileId, String socialType);
 }
