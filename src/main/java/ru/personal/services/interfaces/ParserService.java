@@ -1,6 +1,6 @@
 package ru.personal.services.interfaces;
 
-import ru.personal.dto.Vkontakte.SocialUser;
+import ru.personal.dto.SocialUser;
 
 /**
  * Date 25.09.2018

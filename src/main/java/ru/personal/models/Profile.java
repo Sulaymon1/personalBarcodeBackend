@@ -1,8 +1,10 @@
 package ru.personal.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 /**
  * Date 18.09.2018
@@ -24,7 +26,4 @@ public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
-
 }

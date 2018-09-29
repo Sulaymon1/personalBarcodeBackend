@@ -1,12 +1,10 @@
 package ru.personal.services.implementations;
 
-import org.jsoup.Connection;
-import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-import ru.personal.dto.Vkontakte.SocialUser;
+import ru.personal.dto.SocialUser;
 import ru.personal.services.interfaces.ParserService;
 
 import java.io.IOException;

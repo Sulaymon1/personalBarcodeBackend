@@ -50,4 +50,7 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL)
     private SocialNetwork socialNetwork;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ControlAccessPage controlAccessPage;
 }

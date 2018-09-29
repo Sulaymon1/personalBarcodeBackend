@@ -2,7 +2,7 @@ package ru.personal.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.personal.dto.Vkontakte.SocialUser;
+import ru.personal.dto.SocialUser;
 import ru.personal.models.SocialNetwork;
 import ru.personal.models.User;
 import ru.personal.repositories.UserRepository;

@@ -1,6 +1,6 @@
 package ru.personal.services.interfaces;
 
-import ru.personal.dto.Vkontakte.SocialUser;
+import ru.personal.dto.SocialUser;
 import ru.personal.models.User;
 
 /**

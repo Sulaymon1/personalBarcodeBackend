@@ -115,6 +115,13 @@ public class UserRestController {
 
     }
 
+    @PostMapping("/addContacts")
+    public ResponseEntity addContacts(@RequestParam String token,
+                                      @RequestParam Map<String, String> contacts){
+
+        return ResponseEntity.ok().build();
+    }
+
 
 }
 

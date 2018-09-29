@@ -1,4 +1,4 @@
-package ru.personal.dto.Vkontakte;
+package ru.personal.dto;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
