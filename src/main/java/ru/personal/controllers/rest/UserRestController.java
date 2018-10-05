@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.personal.constants.Image;
 import ru.personal.models.User;
+import ru.personal.repositories.UserRepository;
 import ru.personal.security.JwtTokenUtil;
 import ru.personal.services.interfaces.FileInfoService;
 import ru.personal.services.interfaces.UserService;
@@ -34,6 +35,9 @@ public class UserRestController {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping(value = "/get")
     public ResponseEntity<User> getUser(@RequestParam String token){
@@ -119,6 +123,16 @@ public class UserRestController {
     public ResponseEntity addContacts(@RequestParam String token,
                                       @RequestParam Map<String, String> contacts){
 
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/updateRelation")
+    public ResponseEntity updateRelation(@RequestParam String token, @RequestParam(required = false) String withUsername,
+                                         @RequestParam Long status){
+        User user = userService.getUserByToken(token);
+        user.setStatus(status);
+        user.setWithUsername(withUsername);
+        userRepository.save(user);
         return ResponseEntity.ok().build();
     }
 

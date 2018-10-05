@@ -45,6 +45,9 @@ public class User {
     private LocalDate birthday;
 
 
+    private Long status;
+    private String withUsername;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
