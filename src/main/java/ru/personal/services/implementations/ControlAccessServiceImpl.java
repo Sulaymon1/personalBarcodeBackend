@@ -8,8 +8,9 @@ import ru.personal.models.User;
 import ru.personal.repositories.UserRepository;
 import ru.personal.security.JwtTokenUtil;
 import ru.personal.services.interfaces.ControlAccessService;
+import ru.personal.services.interfaces.UserService;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
  * Date 26.09.2018
@@ -26,6 +27,9 @@ public class ControlAccessServiceImpl implements ControlAccessService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public UserProfileDTO getUserProfile(String username, String token) {
         User user = jwtTokenUtil.getUserFromToken(token);
@@ -34,12 +38,12 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         ControlAccessPage controlAccessPage = guestProfile.getControlAccessPage();
         if (controlAccessPage != null){
             if (controlAccessPage.getIsClosed()){
-                if(controlAccessPage.getFollowers().contains(user)){
+                if(controlAccessPage.getFriends().contains(user)){
                     return getUserDTO(guestProfile);
                 }else if (controlAccessPage.getUsersRequest().contains(user))
-                    return UserProfileDTO.builder().isRequested(true).build();
+                    return getPrivateUserDTO(guestProfile, true);
                 else
-                    return UserProfileDTO.builder().isRequested(false).build();
+                    return getPrivateUserDTO(guestProfile, false);
             }
         }
         return getUserDTO(guestProfile);
@@ -47,18 +51,80 @@ public class ControlAccessServiceImpl implements ControlAccessService {
 
     @Override
     public void addNewRequestUser(String username, String token) {
-        User user = jwtTokenUtil.getUserFromToken(token);
-        user = userRepository.findFirstByPhoneNumber(user.getPhoneNumber());
+        User user = userService.getUserByToken(token);
         User guestProfile = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("user not found by <" + username + ">"));
         ControlAccessPage controlAccessPage = guestProfile.getControlAccessPage();
         if (controlAccessPage != null) {
             if (controlAccessPage.getIsClosed()) {
-                if (!controlAccessPage.getFollowers().contains(user) && !controlAccessPage.getUsersRequest().contains(user)) {
+                if (!controlAccessPage.getFriends().contains(user) && !controlAccessPage.getUsersRequest().contains(user)) {
                     controlAccessPage.getUsersRequest().add(user);
+                    guestProfile.setControlAccessPage(controlAccessPage);
+                    userRepository.save(guestProfile);
                 }
             }
         }
+    }
+
+    @Override
+    public void accept(String username, String token) throws Exception {
+        User user = userService.getUserByToken(token);
+        User requestedUser = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new Exception("Requested user not found"));
+        ControlAccessPage controlAccessPage = user.getControlAccessPage();
+        // if guest user is requested then do guest user role is follower
+        if(controlAccessPage.getUsersRequest().contains(requestedUser)){
+            controlAccessPage.getUsersRequest().remove(requestedUser);
+            if (!controlAccessPage.getFriends().contains(requestedUser)){
+                controlAccessPage.getFriends().add(requestedUser);
+                user.setControlAccessPage(controlAccessPage);
+                userRepository.save(user);
+            }
+        }
+    }
+
+    @Override
+    public void decline(String username, String token) throws Exception {
+        User user = userService.getUserByToken(token);
+        User requestedUser = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new Exception("Requested user not found"));
+        ControlAccessPage controlAccessPage = user.getControlAccessPage();
+        controlAccessPage.getUsersRequest().removeIf(u->u.getId().equals(requestedUser.getId()));
+    }
+
+    @Override
+    public void deleteFollower(String username, String token) throws Exception {
+        User user = userService.getUserByToken(token);
+        User requestedUser = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new Exception("Requested user not found"));
+        ControlAccessPage controlAccessPage = user.getControlAccessPage();
+        controlAccessPage.getFriends().removeIf(u-> u.getId().equals(requestedUser.getId()));
+    }
+
+    @Override
+    public List<User> getRequestedUsers(String token) {
+        User user = userService.getUserByToken(token);
+        ControlAccessPage controlAccessPage = user.getControlAccessPage();
+        return controlAccessPage.getUsersRequest();
+    }
+
+    @Override
+    public List<User> getFollowers(String token) {
+        User user = userService.getUserByToken(token);
+        ControlAccessPage controlAccessPage = user.getControlAccessPage();
+        return controlAccessPage.getFriends();
+    }
+
+    @Override
+    public void closeProfile(String token, Boolean status) {
+        User user = userService.getUserByToken(token);
+        ControlAccessPage controlAccessPage = user.getControlAccessPage();
+        if (controlAccessPage == null){
+            controlAccessPage = new ControlAccessPage();
+        }
+        controlAccessPage.setIsClosed(status);
+        user.setControlAccessPage(controlAccessPage);
+        userRepository.save(user);
     }
 
     private UserProfileDTO getUserDTO(User user){
@@ -72,6 +138,19 @@ public class ControlAccessServiceImpl implements ControlAccessService {
                 .socialNetwork(user.getSocialNetwork())
                 .phoneNumber(user.getPhoneNumber())
                 .username(user.getUsername())
+                .build();
+    }
+
+    private UserProfileDTO getPrivateUserDTO(User guestProfile, Boolean isRequested){
+        return UserProfileDTO
+                .builder()
+                .username(guestProfile.getUsername())
+                .name(guestProfile.getName())
+                .lastName(guestProfile.getLastName())
+                .qrImagePath(guestProfile.getQrImagePath())
+                .profilePhotoPath(guestProfile.getProfilePhotoPath())
+                .coverPhotoPath(guestProfile.getCoverPhotoPath())
+                .isRequested(isRequested)
                 .build();
     }
 }

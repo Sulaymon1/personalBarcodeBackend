@@ -28,9 +28,9 @@ public class GuestRestController {
 
     }
 
-    @PostMapping("/req/{username}")
+    @PostMapping("/req")
     public ResponseEntity requestUser(@RequestParam String token,
-                                      @PathVariable("username") String username){
+                                      @RequestParam String username){
         controlAccessService.addNewRequestUser(username, token);
         return ResponseEntity.ok().build();
     }

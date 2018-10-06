@@ -1,5 +1,6 @@
 package ru.personal.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ControlAccessPage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +29,7 @@ public class ControlAccessPage {
     private Boolean isClosed;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<User> followers;
+    private List<User> friends;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> usersRequest;
