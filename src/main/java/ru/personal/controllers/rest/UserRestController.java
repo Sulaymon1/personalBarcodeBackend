@@ -137,5 +137,30 @@ public class UserRestController {
     }
 
 
+    @PostMapping("/updateAddress")
+    public ResponseEntity updateAddress(@RequestParam String token,
+                                        @RequestParam String city,
+                                        @RequestParam String country){
+        User user = userService.getUserByToken(token);
+        user.setCity(city);
+        user.setCountry(country);
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+
+    }
+
+    @PostMapping("/updateBusinessAddress")
+    public ResponseEntity updateBAddress(@RequestParam String token,
+                                         @RequestParam String bCity,
+                                         @RequestParam String bCountry,
+                                         @RequestParam String bExtra){
+        User user = userService.getUserByToken(token);
+        user.setBCity(bCity);
+        user.setBCountry(bCountry);
+        user.setBExtra(bExtra);
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+
+    }
 }
 
