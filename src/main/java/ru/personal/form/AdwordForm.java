@@ -2,6 +2,7 @@ package ru.personal.form;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
  **/
 @Getter
 @Setter
+@ToString
 public class AdwordForm {
     private String token;
 
@@ -23,7 +25,6 @@ public class AdwordForm {
     private String adDescription;
     @NotNull
     private String adLink;
-    @Transient
     @NotNull
     private String adPhoto;
 

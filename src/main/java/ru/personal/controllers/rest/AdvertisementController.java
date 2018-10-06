@@ -20,7 +20,15 @@ public class AdvertisementController {
     private AdvertisementService advertisementService;
 
     @PostMapping("/add")
-    public ResponseEntity add(@RequestBody AdwordForm adwordForm){
+    public ResponseEntity add(@RequestParam String adName, @RequestParam String token,
+                              @RequestParam String adDescription, @RequestParam String adLink,
+                              @RequestParam String adPhoto){
+        AdwordForm adwordForm = new AdwordForm();
+        adwordForm.setAdDescription(adDescription);
+        adwordForm.setAdLink(adLink);
+        adwordForm.setAdName(adName);
+        adwordForm.setAdPhoto(adPhoto);
+        adwordForm.setToken(token);
         advertisementService.addNewAdvertisement(adwordForm);
         return ResponseEntity.ok().build();
     }
