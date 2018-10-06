@@ -3,14 +3,17 @@ package ru.personal.services.implementations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.personal.dto.UserProfileDTO;
+import ru.personal.models.Advertisement;
 import ru.personal.models.ControlAccessPage;
 import ru.personal.models.User;
+import ru.personal.repositories.AdvertisementRepository;
 import ru.personal.repositories.UserRepository;
 import ru.personal.security.JwtTokenUtil;
 import ru.personal.services.interfaces.ControlAccessService;
 import ru.personal.services.interfaces.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Date 26.09.2018
@@ -30,11 +33,15 @@ public class ControlAccessServiceImpl implements ControlAccessService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AdvertisementRepository advertisementRepository;
+
     @Override
     public UserProfileDTO getUserProfile(String username, String token) {
         User user = jwtTokenUtil.getUserFromToken(token);
         User guestProfile = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("user not found by <"+username+">"));
+
         ControlAccessPage controlAccessPage = guestProfile.getControlAccessPage();
         if (controlAccessPage != null){
             if (controlAccessPage.getIsClosed()){
@@ -128,6 +135,7 @@ public class ControlAccessServiceImpl implements ControlAccessService {
     }
 
     private UserProfileDTO getUserDTO(User user){
+        Advertisement advertisement = advertisementRepository.findFirstByUserId(user.getId()).orElse(null);
         return UserProfileDTO.builder()
                 .name(user.getName())
                 .lastName(user.getLastName())
@@ -138,6 +146,14 @@ public class ControlAccessServiceImpl implements ControlAccessService {
                 .socialNetwork(user.getSocialNetwork())
                 .phoneNumber(user.getPhoneNumber())
                 .username(user.getUsername())
+                .advertisement(advertisement)
+                .city(user.getCity())
+                .country(user.getCountry())
+                .bCity(user.getBCity())
+                .bCountry(user.getBCountry())
+                .bExtra(user.getBExtra())
+                .status(user.getStatus())
+                .withUsername(user.getWithUsername())
                 .build();
     }
 
