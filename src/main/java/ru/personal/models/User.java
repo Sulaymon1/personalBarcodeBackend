@@ -44,6 +44,8 @@ public class User {
     @JsonFormat(pattern = "YYYY-MM-dd")
     private LocalDate birthday;
 
+
+
     private String country;
     private String city;
     private String bCountry;

@@ -29,6 +29,9 @@ public class FileInfoServiceImpl implements FileInfoService {
     @Value("${storage.coverPhotoPath}")
     private String coverPhotoPath;
 
+    @Value("${storage.advertisementPhotoPath}")
+    private String advertisementPhotoPath;
+
     @Override
     public String getImageBase64(String fileName, Image image){
         String encodedString = null;
@@ -62,6 +65,8 @@ public class FileInfoServiceImpl implements FileInfoService {
                 file = new File(qrImagePath + newFileName + ".jpeg");
             }else if (imageType.equals(Image.CoverPhoto)){
                 file = new File(coverPhotoPath + newFileName + ".jpeg");
+            }else if (imageType.equals(Image.AdvertisementPic)){
+                file = new File(advertisementPhotoPath + newFileName + ".jpeg");
             }
             file.mkdir();
             ImageIO.write(image, "jpeg", file);
@@ -82,6 +87,8 @@ public class FileInfoServiceImpl implements FileInfoService {
             }
             else if (photoType.equals("coverPhoto")){
                 file = new File(coverPhotoPath + fileName + ".jpeg");
+            }else if (photoType.equals("advertisementPhoto")){
+                file = new File(advertisementPhotoPath + fileName + ".jpeg");
             }
             if (file.exists()) {
                 InputStream is;
