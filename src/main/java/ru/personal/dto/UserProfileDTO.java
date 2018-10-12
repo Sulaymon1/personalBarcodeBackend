@@ -1,10 +1,8 @@
 package ru.personal.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 import ru.personal.models.Advertisement;
 import ru.personal.models.SocialNetwork;
 
@@ -19,6 +17,8 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
+@ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserProfileDTO {
 
     private String phoneNumber;
@@ -45,4 +45,7 @@ public class UserProfileDTO {
 
     private SocialNetwork socialNetwork;
     private Boolean isRequested;
+
+    private Boolean isClosed;
+
 }

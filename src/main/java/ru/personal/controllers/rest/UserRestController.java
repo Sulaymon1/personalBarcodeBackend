@@ -5,6 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.personal.constants.Image;
+import ru.personal.dto.UserProfileDTO;
+import ru.personal.dto.GuestDto;
 import ru.personal.models.User;
 import ru.personal.repositories.UserRepository;
 import ru.personal.security.JwtTokenUtil;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,8 +43,8 @@ public class UserRestController {
     private UserRepository userRepository;
 
     @PostMapping(value = "/get")
-    public ResponseEntity<User> getUser(@RequestParam String token){
-        return ResponseEntity.ok(userService.getUserByToken(token));
+    public ResponseEntity<UserProfileDTO> getUser(@RequestParam String token){
+        return ResponseEntity.ok(userService.getUserDTOByToken(token));
     }
 
 
@@ -105,7 +108,8 @@ public class UserRestController {
 
     @PostMapping("/updateUsername")
     public ResponseEntity<Map<String, Boolean>> updateUsername(@RequestParam String token,
-                                                             @RequestParam String username, @RequestParam String qrImage){
+                                                               @RequestParam String username,
+                                                               @RequestParam String qrImage){
         return ResponseEntity.ok(Collections.singletonMap("answer", userService.updateUsername(token, username, qrImage)));
     }
 
@@ -161,6 +165,12 @@ public class UserRestController {
         userRepository.save(user);
         return ResponseEntity.ok().build();
 
+    }
+
+
+    @GetMapping("/getGuests")
+    public ResponseEntity<List<GuestDto>> getGuests(String token){
+       return ResponseEntity.ok(userService.getUserGuests(token));
     }
 }
 

@@ -3,6 +3,7 @@ package ru.personal.controllers.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.personal.dto.UserProfileDTO;
 import ru.personal.models.User;
 import ru.personal.services.interfaces.ControlAccessService;
 
@@ -44,8 +45,8 @@ public class AccessControlRestController {
     }
 
     @PostMapping("/getRequestedUsers")
-    public ResponseEntity<List<User>> getRequestedUsers(@RequestParam String token){
-        List<User> users = controlAccessService.getRequestedUsers(token);
+    public ResponseEntity<List<UserProfileDTO>> getRequestedUsers(@RequestParam String token){
+        List<UserProfileDTO> users = controlAccessService.getRequestedUsers(token);
         return ResponseEntity.ok(users);
     }
 

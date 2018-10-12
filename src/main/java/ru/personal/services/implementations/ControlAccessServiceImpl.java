@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.personal.dto.UserProfileDTO;
 import ru.personal.models.Advertisement;
 import ru.personal.models.ControlAccessPage;
+import ru.personal.models.Guest;
 import ru.personal.models.User;
 import ru.personal.repositories.AdvertisementRepository;
 import ru.personal.repositories.UserRepository;
@@ -12,8 +13,8 @@ import ru.personal.security.JwtTokenUtil;
 import ru.personal.services.interfaces.ControlAccessService;
 import ru.personal.services.interfaces.UserService;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * Date 26.09.2018
@@ -41,7 +42,7 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         User user = jwtTokenUtil.getUserFromToken(token);
         User guestProfile = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("user not found by <"+username+">"));
-
+        saveGuest(guestProfile, user);
         ControlAccessPage controlAccessPage = guestProfile.getControlAccessPage();
         if (controlAccessPage != null){
             if (controlAccessPage.getIsClosed()){
@@ -54,6 +55,23 @@ public class ControlAccessServiceImpl implements ControlAccessService {
             }
         }
         return getUserDTO(guestProfile);
+    }
+
+    private void saveGuest(User guest, User user){
+        Guest guestP = Guest.builder()
+                .enteredDate(LocalDateTime.now())
+                .guest(guest)
+                .build();
+        List<Guest> guests = user.getGuests();
+        if (guests == null){
+            guests = new ArrayList<>();
+        }
+        if (guests.size()>10){
+            guests.remove(0);
+        }
+        guests.add(guestP);
+        user.setGuests(guests);
+        userRepository.save(user);
     }
 
     @Override
@@ -109,10 +127,29 @@ public class ControlAccessServiceImpl implements ControlAccessService {
     }
 
     @Override
-    public List<User> getRequestedUsers(String token) {
+    public List<UserProfileDTO> getRequestedUsers(String token) {
         User user = userService.getUserByToken(token);
         ControlAccessPage controlAccessPage = user.getControlAccessPage();
-        return controlAccessPage.getUsersRequest();
+        List<UserProfileDTO> userList = new ArrayList<>();
+        List<User> usersRequest = controlAccessPage.getUsersRequest();
+        usersRequest.forEach(user1 ->{
+          UserProfileDTO userDto = UserProfileDTO.builder()
+                   .lastName(user1.getLastName())
+                   .name(user1.getName())
+                   .username(user1.getUsername())
+                   .build();
+          if (user1.getControlAccessPage()!=null && !user1.getControlAccessPage().getIsClosed()){
+              userDto.setPhoneNumber(user1.getPhoneNumber());
+              userDto.setIsRequested(true);
+          }else if (user1.getControlAccessPage()!=null && user1.getControlAccessPage().getIsClosed()){
+              userDto.setIsRequested(false);
+          }else {
+              userDto.setPhoneNumber(user1.getPhoneNumber());
+              userDto.setIsRequested(true);
+          }
+          userList.add(userDto);
+        });
+        return userList;
     }
 
     @Override

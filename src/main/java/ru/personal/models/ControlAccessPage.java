@@ -14,12 +14,12 @@ import java.util.List;
  **/
 @Entity
 @Table(name = "control_access_page")
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"friends", "usersRequest"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ControlAccessPage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

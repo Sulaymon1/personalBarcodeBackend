@@ -1,8 +1,11 @@
 package ru.personal.services.interfaces;
 
+import ru.personal.dto.GuestDto;
+import ru.personal.dto.UserProfileDTO;
 import ru.personal.models.User;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Date 03.07.2018
@@ -20,4 +23,7 @@ public interface UserService {
     boolean hasUsername(String username);
 
     void updateUserInfo(String token, String name, String lastname, LocalDate date);
+    UserProfileDTO getUserDTOByToken(String token);
+
+    List<GuestDto> getUserGuests(String token);
 }

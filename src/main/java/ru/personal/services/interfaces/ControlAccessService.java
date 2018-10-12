@@ -21,7 +21,7 @@ public interface ControlAccessService {
 
     void deleteFollower(String username, String token) throws Exception;
 
-    List<User> getRequestedUsers(String token);
+    List<UserProfileDTO> getRequestedUsers(String token);
     List<User> getFollowers(String token);
 
     void closeProfile(String token, Boolean status);

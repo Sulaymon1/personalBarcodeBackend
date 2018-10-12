@@ -1,5 +1,6 @@
 package ru.personal.models;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -7,6 +8,7 @@ import ru.personal.security.role.Role;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -17,10 +19,10 @@ import java.util.List;
  **/
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"controlAccessPage"})
 @Entity
 @Table(name = "users")
-@ToString
+@ToString(exclude = {"controlAccessPage"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -62,6 +64,8 @@ public class User {
     private SocialNetwork socialNetwork;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-
     private ControlAccessPage controlAccessPage;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Guest> guests;
 }

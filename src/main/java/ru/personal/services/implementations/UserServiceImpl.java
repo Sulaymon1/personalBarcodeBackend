@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.personal.constants.Image;
+import ru.personal.dto.GuestDto;
+import ru.personal.dto.UserProfileDTO;
+import ru.personal.models.Guest;
 import ru.personal.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,8 @@ import ru.personal.services.interfaces.FileInfoService;
 import ru.personal.services.interfaces.UserService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Date 03.07.2018
@@ -67,9 +72,48 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public UserProfileDTO getUserDTOByToken(String token) {
+        log.info("got token");
+        User userFromToken = jwtTokenUtil.getUserFromToken(token);
+        User user = userRepository.findFirstByPhoneNumber(userFromToken.getPhoneNumber());
+        if (user == null){
+            throw new IllegalArgumentException("user not found");
+        }
+        // TODO: 11.10.2018 make it by framework mapconstruct
+        UserProfileDTO build = UserProfileDTO.builder()
+                .lastName(user.getLastName())
+                .name(user.getName())
+                .username(user.getUsername())
+                .profilePhotoPath(user.getProfilePhotoPath())
+                .phoneNumber(user.getPhoneNumber())
+                .isRequested(user.getControlAccessPage() != null ? user.getControlAccessPage().getIsClosed() : false)
+                .build();
+        return build;
+    }
 
 
-
+    @Override
+    public List<GuestDto> getUserGuests(String token) {
+        User user = getUserByToken(token);
+        List<Guest> guests = user.getGuests();
+        List<GuestDto> guestDtoList = new ArrayList<>();
+        if (guests != null){
+            guests.forEach(guest -> {
+                User userGuest = guest.getGuest();
+                GuestDto guestDto = GuestDto.builder()
+                        .lastname(userGuest.getLastName())
+                        .name(userGuest.getName())
+                        .profilePhoto(userGuest.getProfilePhotoPath())
+                        .date(guest.getEnteredDate())
+                        .username(userGuest.getUsername())
+                        .build();
+                guestDtoList.add(guestDto);
+            });
+            return guestDtoList;
+        }
+        return null;
+    }
 
     @Override
     public boolean hasUsername(String username) {
