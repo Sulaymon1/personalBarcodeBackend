@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.personal.constants.Image;
 import ru.personal.dto.GuestDto;
 import ru.personal.dto.UserProfileDTO;
+import ru.personal.mapper.UserMapper;
 import ru.personal.models.Guest;
 import ru.personal.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private FileInfoService fileInfoService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public void saveUser(User user) {
@@ -74,22 +78,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileDTO getUserDTOByToken(String token) {
-        log.info("got token");
-        User userFromToken = jwtTokenUtil.getUserFromToken(token);
-        User user = userRepository.findFirstByPhoneNumber(userFromToken.getPhoneNumber());
-        if (user == null){
-            throw new IllegalArgumentException("user not found");
-        }
-        // TODO: 11.10.2018 make it by framework mapconstruct
-        UserProfileDTO build = UserProfileDTO.builder()
-                .lastName(user.getLastName())
-                .name(user.getName())
-                .username(user.getUsername())
-                .profilePhotoPath(user.getProfilePhotoPath())
-                .phoneNumber(user.getPhoneNumber())
-                .isRequested(user.getControlAccessPage() != null ? user.getControlAccessPage().getIsClosed() : false)
-                .build();
-        return build;
+        User user = getUserByToken(token);
+        return userMapper.toUserDTO(user);
     }
 
 

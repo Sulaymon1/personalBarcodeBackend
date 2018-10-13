@@ -137,15 +137,11 @@ public class ControlAccessServiceImpl implements ControlAccessService {
                    .lastName(user1.getLastName())
                    .name(user1.getName())
                    .username(user1.getUsername())
+                   .isClosed(true)
                    .build();
-          if (user1.getControlAccessPage()!=null && !user1.getControlAccessPage().getIsClosed()){
+          if (user1.getControlAccessPage()== null || user1.getControlAccessPage()!=null && !user1.getControlAccessPage().getIsClosed()){
               userDto.setPhoneNumber(user1.getPhoneNumber());
-              userDto.setIsRequested(true);
-          }else if (user1.getControlAccessPage()!=null && user1.getControlAccessPage().getIsClosed()){
-              userDto.setIsRequested(false);
-          }else {
-              userDto.setPhoneNumber(user1.getPhoneNumber());
-              userDto.setIsRequested(true);
+              userDto.setIsClosed(false);
           }
           userList.add(userDto);
         });
