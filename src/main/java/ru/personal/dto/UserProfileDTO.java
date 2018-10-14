@@ -41,6 +41,8 @@ public class UserProfileDTO {
     private String qrImagePath;
     private String coverPhotoPath;
 
+    private Boolean locationStatus;
+
     private SocialNetwork socialNetwork;
     private Boolean isRequested;
 

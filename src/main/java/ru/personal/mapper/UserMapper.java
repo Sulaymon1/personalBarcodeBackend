@@ -29,6 +29,7 @@ public class UserMapper {
                 .bExtra(user.getBExtra())
                 .status(user.getStatus())
                 .withUsername(user.getWithUsername())
+                .locationStatus(user.getLocationStatus())
                 .build();
 
 

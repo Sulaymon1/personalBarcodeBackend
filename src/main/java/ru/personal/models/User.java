@@ -43,7 +43,7 @@ public class User {
     private String qrImagePath;
     private String coverPhotoPath;
 
-
+    private Boolean locationStatus;
 
 
     private String country;

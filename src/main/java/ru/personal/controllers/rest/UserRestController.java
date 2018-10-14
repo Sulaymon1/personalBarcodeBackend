@@ -116,8 +116,7 @@ public class UserRestController {
     @PostMapping("/updateUserInfo")
     public ResponseEntity<?> updateUserInfo(@RequestParam String token,
                                              @RequestParam(required = false) String name,
-                                             @RequestParam(required = false) String lastname, // 2018-09-22
-                                             @RequestParam(required = false) @DateTimeFormat( iso = DateTimeFormat.ISO.DATE) LocalDate date){
+                                             @RequestParam(required = false) String lastname){
         userService.updateUserInfo(token, name, lastname);
         return ResponseEntity.ok().build();
 
