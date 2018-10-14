@@ -32,6 +32,9 @@ public class UserMapper {
                 .locationStatus(user.getLocationStatus())
                 .build();
 
+        if (user.getControlAccessPage() != null){
+            build.setIsClosed(user.getControlAccessPage().getIsClosed());
+        }
 
         return build;
     }
