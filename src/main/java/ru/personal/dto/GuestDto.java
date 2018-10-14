@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Date 12.10.2018
@@ -17,10 +18,10 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 public class GuestDto {
-    private String profilePhoto;
-    private String lastname;
-    private String name;
-    private String username;
+    private List<String> profilePhoto;
+    private List<String> lastname;
+    private List<String> name;
+    private List<String> username;
     @JsonFormat(pattern = "YYYY-MM-dd")
-    private LocalDateTime date;
+    private List<LocalDateTime> date;
 }

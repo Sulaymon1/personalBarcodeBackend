@@ -162,7 +162,7 @@ public class UserRestController {
 
 
     @GetMapping("/getGuests")
-    public ResponseEntity<List<GuestDto>> getGuests(String token){
+    public ResponseEntity<GuestDto> getGuests(String token){
        return ResponseEntity.ok(userService.getUserGuests(token));
     }
 }

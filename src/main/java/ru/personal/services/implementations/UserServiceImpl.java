@@ -17,6 +17,7 @@ import ru.personal.services.interfaces.FileInfoService;
 import ru.personal.services.interfaces.UserService;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,23 +85,32 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<GuestDto> getUserGuests(String token) {
+    public GuestDto getUserGuests(String token) {
         User user = getUserByToken(token);
         List<Guest> guests = user.getGuests();
         List<GuestDto> guestDtoList = new ArrayList<>();
         if (guests != null){
+            List<String> lastName = new ArrayList<>();
+            List<String> name = new ArrayList<>();
+            List<String> profilePhoto = new ArrayList<>();
+            List<LocalDateTime> date = new ArrayList<>();
+            List<String> username = new ArrayList<>();
             guests.forEach(guest -> {
                 User userGuest = guest.getGuest();
-                GuestDto guestDto = GuestDto.builder()
-                        .lastname(userGuest.getLastName())
-                        .name(userGuest.getName())
-                        .profilePhoto(userGuest.getProfilePhotoPath())
-                        .date(guest.getEnteredDate())
-                        .username(userGuest.getUsername())
-                        .build();
-                guestDtoList.add(guestDto);
+                lastName.add(userGuest.getLastName());
+                name.add(userGuest.getName());
+                profilePhoto.add(userGuest.getProfilePhotoPath());
+                date.add(guest.getEnteredDate());
+                username.add(userGuest.getUsername());
             });
-            return guestDtoList;
+            GuestDto guestDto = GuestDto.builder()
+                    .lastname(lastName)
+                    .name(name)
+                    .profilePhoto(profilePhoto)
+                    .date(date)
+                    .username(username)
+                    .build();
+            return guestDto;
         }
         return null;
     }

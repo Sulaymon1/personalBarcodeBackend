@@ -25,5 +25,5 @@ public interface UserService {
     void updateUserInfo(String token, String name, String lastname);
     UserProfileDTO getUserDTOByToken(String token);
 
-    List<GuestDto> getUserGuests(String token);
+    GuestDto getUserGuests(String token);
 }
