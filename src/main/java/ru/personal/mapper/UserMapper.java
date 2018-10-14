@@ -16,7 +16,6 @@ public class UserMapper {
     public UserProfileDTO toUserDTO(User user){
         UserProfileDTO build = UserProfileDTO.builder().name(user.getName())
                 .lastName(user.getLastName())
-                .birthday(user.getBirthday())
                 .coverPhotoPath(user.getCoverPhotoPath())
                 .profilePhotoPath(user.getProfilePhotoPath())
                 .qrImagePath(user.getQrImagePath())

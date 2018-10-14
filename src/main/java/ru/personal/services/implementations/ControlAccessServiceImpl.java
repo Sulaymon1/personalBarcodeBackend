@@ -39,7 +39,7 @@ public class ControlAccessServiceImpl implements ControlAccessService {
 
     @Override
     public UserProfileDTO getUserProfile(String username, String token) {
-        User user = jwtTokenUtil.getUserFromToken(token);
+        User user = userService.getUserByToken(token);
         User guestProfile = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("user not found by <"+username+">"));
         saveGuest(guestProfile, user);
@@ -71,6 +71,7 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         }
         guests.add(guestP);
         user.setGuests(guests);
+
         userRepository.save(user);
     }
 
@@ -172,7 +173,6 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         return UserProfileDTO.builder()
                 .name(user.getName())
                 .lastName(user.getLastName())
-                .birthday(user.getBirthday())
                 .coverPhotoPath(user.getCoverPhotoPath())
                 .profilePhotoPath(user.getProfilePhotoPath())
                 .qrImagePath(user.getQrImagePath())

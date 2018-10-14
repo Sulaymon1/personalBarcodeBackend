@@ -19,7 +19,6 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-//JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ControlAccessPage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

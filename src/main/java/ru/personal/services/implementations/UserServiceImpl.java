@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserInfo(String token, String name, String lastname, LocalDate birthday) {
+    public void updateUserInfo(String token, String name, String lastname) {
         User user = jwtTokenUtil.getUserFromToken(token);
         user = userRepository.findFirstByPhoneNumber(user.getPhoneNumber());
         if (name != null){
@@ -120,9 +120,7 @@ public class UserServiceImpl implements UserService {
         if (lastname != null){
             user.setLastName(lastname);
         }
-        if (birthday != null){
-            user.setBirthday(birthday);
-        }
+
         userRepository.save(user);
     }
 

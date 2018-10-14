@@ -22,7 +22,7 @@ public interface UserService {
 
     boolean hasUsername(String username);
 
-    void updateUserInfo(String token, String name, String lastname, LocalDate date);
+    void updateUserInfo(String token, String name, String lastname);
     UserProfileDTO getUserDTOByToken(String token);
 
     List<GuestDto> getUserGuests(String token);

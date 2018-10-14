@@ -40,8 +40,6 @@ public class UserProfileDTO {
     private String profilePhotoPath;
     private String qrImagePath;
     private String coverPhotoPath;
-    @JsonFormat(pattern = "YYYY-MM-dd")
-    private LocalDate birthday;
 
     private SocialNetwork socialNetwork;
     private Boolean isRequested;

@@ -118,7 +118,7 @@ public class UserRestController {
                                              @RequestParam(required = false) String name,
                                              @RequestParam(required = false) String lastname, // 2018-09-22
                                              @RequestParam(required = false) @DateTimeFormat( iso = DateTimeFormat.ISO.DATE) LocalDate date){
-        userService.updateUserInfo(token, name, lastname, date);
+        userService.updateUserInfo(token, name, lastname);
         return ResponseEntity.ok().build();
 
     }

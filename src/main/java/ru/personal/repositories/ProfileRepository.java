@@ -1,7 +1,6 @@
 package ru.personal.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.personal.models.Profile;
 
 /**
  * Date 29.09.2018
