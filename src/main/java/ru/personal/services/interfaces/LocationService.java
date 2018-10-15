@@ -1,5 +1,7 @@
 package ru.personal.services.interfaces;
 
+import ru.personal.dto.LocationDTO;
+
 /**
  * Date 14.10.2018
  *
@@ -10,4 +12,6 @@ public interface LocationService {
     void switchLocation(String token, Boolean status);
 
     void setLocation(String token, String longitude, String attitude);
+
+    LocationDTO getLocations(String s, String l);
 }

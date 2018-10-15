@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.personal.dto.LocationDTO;
 import ru.personal.services.interfaces.LocationService;
 
 /**
@@ -36,7 +37,10 @@ public class LocationRestController {
     }
 
     @PostMapping("/get")
-    public ResponseEntity getLocation(){
-        return null;
+    public ResponseEntity<LocationDTO> getLocation(@RequestParam String latitude,
+                                      @RequestParam String longitude){
+        LocationDTO locations = locationService.getLocations(latitude, longitude);
+        return ResponseEntity.ok(locations);
     }
+
 }

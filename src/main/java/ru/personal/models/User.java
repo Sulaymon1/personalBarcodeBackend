@@ -43,7 +43,6 @@ public class User {
     private String qrImagePath;
     private String coverPhotoPath;
 
-    private Boolean locationStatus;
 
 
     private String country;
@@ -66,4 +65,7 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Guest> guests;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Location location;
 }

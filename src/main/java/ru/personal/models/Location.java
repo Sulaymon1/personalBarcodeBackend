@@ -27,6 +27,9 @@ public class Location {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
+    private Boolean locationStatus;
+
+
     private String longitude;
     private String attitude;
 }

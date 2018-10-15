@@ -29,11 +29,13 @@ public class UserMapper {
                 .bExtra(user.getBExtra())
                 .status(user.getStatus())
                 .withUsername(user.getWithUsername())
-                .locationStatus(user.getLocationStatus())
                 .build();
 
         if (user.getControlAccessPage() != null){
             build.setIsClosed(user.getControlAccessPage().getIsClosed());
+        }
+        if (user.getLocation() != null){
+            build.setLocationStatus(user.getLocation().getLocationStatus());
         }
 
         return build;
