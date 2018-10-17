@@ -60,6 +60,8 @@ public class LocationServiceImpl implements LocationService {
         location.setAttitude(attitude);
         location.setLongitude(longitude);
         locationRepository.save(location);
+        user.setLocation(location);
+        userRepository.save(user);
     }
 
     @Override
