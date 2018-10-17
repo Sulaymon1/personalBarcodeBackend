@@ -11,7 +11,7 @@ import ru.personal.dto.LocationDTO;
 public interface LocationService {
     void switchLocation(String token, Boolean status);
 
-    void setLocation(String token, String longitude, String attitude);
+    void setLocation(String token, Float longitude, Float latitude);
 
-    LocationDTO getLocations(String s, String l);
+    LocationDTO getLocations(Float iLat, Float iLong, Float fLat, Float fLong);
 }

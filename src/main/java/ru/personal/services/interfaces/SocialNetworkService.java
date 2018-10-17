@@ -11,7 +11,7 @@ import ru.personal.models.User;
  **/
 public interface SocialNetworkService {
 
-    SocialUser getInfo(User user);
+    SocialUser getInfo(String token);
 
     void add(User user, String profileId, String socialType);
 }

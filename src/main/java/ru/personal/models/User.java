@@ -57,8 +57,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private SocialNetwork socialNetwork;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SocialNetwork> socialNetwork;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ControlAccessPage controlAccessPage;

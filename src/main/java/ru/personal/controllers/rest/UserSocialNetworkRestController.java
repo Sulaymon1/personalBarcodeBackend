@@ -36,7 +36,6 @@ public class UserSocialNetworkRestController {
 
     @PostMapping("/get")
     public ResponseEntity<SocialUser> getStatusInfo(@RequestParam String token){
-        User user = userService.getUserByToken(token);
-        return ResponseEntity.ok( socialNetworkService.getInfo(user));
+        return ResponseEntity.ok( socialNetworkService.getInfo(token));
     }
 }

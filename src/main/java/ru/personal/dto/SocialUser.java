@@ -18,7 +18,4 @@ import java.util.List;
 public class SocialUser {
     private List<String> socialType = new ArrayList<>();
     private List<String> id = new ArrayList<>();
-    private List<String> fullName = new ArrayList<>();
-    private List<String> profilePhoto = new ArrayList<>();
-    private List<String> lastSeen = new ArrayList<>();
 }

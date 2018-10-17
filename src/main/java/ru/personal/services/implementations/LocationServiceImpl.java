@@ -47,17 +47,17 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public void setLocation(String token, String longitude, String attitude) {
+    public void setLocation(String token, Float longitude, Float latitude) {
         User user = userService.getUserByToken(token);
         Location location = locationRepository.findFirstByUser(user);
         if (location == null) {
             location = Location.builder()
                     .user(user)
                     .longitude(longitude)
-                    .attitude(attitude)
+                    .latitude(latitude)
                     .build();
         }
-        location.setAttitude(attitude);
+        location.setLatitude(latitude);
         location.setLongitude(longitude);
         locationRepository.save(location);
         user.setLocation(location);
@@ -65,16 +65,16 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public LocationDTO getLocations(String attitude, String longitude){
+    public LocationDTO getLocations(Float iLat, Float iLong, Float fLat, Float fLong){
         List<Location> list =
-                locationRepository.findAllByLocationStatusIsTrueAndAttitudeStartsWithAndLongitudeStartsWith(attitude, longitude);
+                locationRepository.findAllByLocationStatusIsTrueAndAttitudeStartsWithAndLongitudeStartsWith(iLat, iLong, fLat, fLong );
         LocationDTO locationDTO = LocationDTO.builder()
                 .username(new ArrayList<>())
                 .lastName(new ArrayList<>())
                 .name(new ArrayList<>())
                 .profilePhotoPath(new ArrayList<>())
                 .longitude(new ArrayList<>())
-                .attitude(new ArrayList<>())
+                .latitude(new ArrayList<>())
                 .build();
         for (Location location: list){
             locationDTO.getUsername().add(location.getUser().getUsername());
@@ -82,7 +82,7 @@ public class LocationServiceImpl implements LocationService {
             locationDTO.getName().add(location.getUser().getName());
             locationDTO.getProfilePhotoPath().add(location.getUser().getProfilePhotoPath());
             locationDTO.getLongitude().add(location.getLongitude());
-            locationDTO.getAttitude().add(location.getAttitude());
+            locationDTO.getLatitude().add(location.getLatitude());
         }
 
         return locationDTO;

@@ -30,6 +30,6 @@ public class Location {
     private Boolean locationStatus;
 
 
-    private String longitude;
-    private String attitude;
+    private Float longitude;
+    private Float latitude;
 }

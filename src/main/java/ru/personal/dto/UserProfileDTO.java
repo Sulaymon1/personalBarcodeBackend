@@ -7,6 +7,7 @@ import ru.personal.models.Advertisement;
 import ru.personal.models.SocialNetwork;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Date 26.09.2018
@@ -43,7 +44,7 @@ public class UserProfileDTO {
 
     private Boolean locationStatus;
 
-    private SocialNetwork socialNetwork;
+    private List<SocialNetwork> socialNetwork;
     private Boolean isRequested;
 
     private Boolean isClosed;

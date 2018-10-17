@@ -6,8 +6,12 @@ import ru.personal.dto.SocialUser;
 import ru.personal.models.SocialNetwork;
 import ru.personal.models.User;
 import ru.personal.repositories.UserRepository;
-import ru.personal.services.interfaces.ParserService;
 import ru.personal.services.interfaces.SocialNetworkService;
+import ru.personal.services.interfaces.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Date 24.09.2018
@@ -21,34 +25,46 @@ public class SocialNetworkServiceImpl implements SocialNetworkService {
     @Autowired
     private UserRepository userRepository;
 
+
+
     @Autowired
-    private ParserService parserService;
-
-
+    private UserService userService;
 
     @Override
-    public SocialUser getInfo(User user){
-        SocialNetwork socialNetwork = user.getSocialNetwork();
-        String vkId = socialNetwork.getVkId();
-        String fbId = socialNetwork.getFbId();
-        parserService.setSocialUser(new SocialUser());
-        parserService.parseVK(vkId);
-        parserService.parseFB(fbId);
-        return parserService.getSocialUser();
+    public SocialUser getInfo(String token){
+        User user = userService.getUserByToken(token);
+        List<SocialNetwork> socialNetworkList = user.getSocialNetwork();
+        SocialUser socialUser = new SocialUser();
+        List<String> socialId = new ArrayList();
+        List<String> socialType = new ArrayList();
+        for (SocialNetwork socialNetwork: socialNetworkList){
+            socialId.add(socialNetwork.getSocialId());
+            socialType.add(socialNetwork.getSocialType());
+        }
+        socialUser.setId(socialId);
+        socialUser.setSocialType(socialType);
+        return socialUser;
     }
 
     @Override
     public void add(User user, String profileId, String socialType) {
-        SocialNetwork socialNetwork = user.getSocialNetwork();
-        if (socialNetwork == null){
-            socialNetwork = new SocialNetwork();
+        List<SocialNetwork> socialNetworkList = user.getSocialNetwork();
+        if (socialNetworkList == null){
+            socialNetworkList = new ArrayList<>();
         }
-        if (socialType.equals("VK"))
-            socialNetwork.setVkId(profileId);
-        else if (socialType.equals("FB"))
-            socialNetwork.setFbId(profileId);
 
-        user.setSocialNetwork(socialNetwork);
+        Optional<SocialNetwork> optionalSocialNetwork = socialNetworkList.stream().filter(o -> o.getSocialType().equals(socialType)).findFirst();
+        SocialNetwork socialNetwork ;
+        if (optionalSocialNetwork.isPresent()){
+            socialNetwork = optionalSocialNetwork.get();
+            socialNetwork.setSocialId(profileId);
+        }else {
+            socialNetwork = new SocialNetwork();
+            socialNetwork.setSocialType(socialType);
+            socialNetwork.setSocialId(profileId);
+        }
+        socialNetworkList.add(socialNetwork);
+        user.setSocialNetwork(socialNetworkList);
         userRepository.save(user);
     }
 }

@@ -1,6 +1,8 @@
 package ru.personal.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.personal.models.Location;
 import ru.personal.models.User;
 
@@ -13,6 +15,11 @@ import java.util.List;
  * @version v1.0
  **/
 public interface LocationRepository extends JpaRepository<Location, Long> {
-    List<Location> findAllByLocationStatusIsTrueAndAttitudeStartsWithAndLongitudeStartsWith(String a, String b);
+    @Query(nativeQuery = true, value = "SELECT * FROM locations a " +
+            "WHERE a.location_status=TRUE AND a.latitude >= :ilatitude AND a.latitude<= :flatitude " +
+            "and a.longitude >= :ilongitude and a.longitude <= :flongitude")
+    List<Location> findAllByLocationStatusIsTrueAndAttitudeStartsWithAndLongitudeStartsWith(
+            @Param("ilatitude") Float ilatitude,@Param("ilongitude") Float ilongitude,
+            @Param("flatitude") Float flatitude,@Param("flongitude") Float flongitude);
     Location findFirstByUser(User user);
 }

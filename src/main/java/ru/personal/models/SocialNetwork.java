@@ -23,6 +23,6 @@ public class SocialNetwork {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String vkId;
-    private String fbId;
+    private String socialType;
+    private String socialId;
 }
