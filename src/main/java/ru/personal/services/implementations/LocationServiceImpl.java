@@ -47,7 +47,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public void setLocation(String token, Float longitude, Float latitude) {
+    public void setLocation(String token, Double longitude, Double latitude) {
         User user = userService.getUserByToken(token);
         Location location = locationRepository.findFirstByUser(user);
         if (location == null) {
@@ -65,7 +65,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public LocationDTO getLocations(Float iLat, Float iLong, Float fLat, Float fLong){
+    public LocationDTO getLocations(Double iLat, Double iLong, Double fLat, Double fLong){
         List<Location> list =
                 locationRepository.findAllByLocationStatusIsTrueAndAttitudeStartsWithAndLongitudeStartsWith(iLat, iLong, fLat, fLong );
         LocationDTO locationDTO = LocationDTO.builder()

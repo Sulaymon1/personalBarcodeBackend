@@ -30,15 +30,15 @@ public class LocationRestController {
 
     @PostMapping("/set")
     public ResponseEntity setLocation(@RequestParam String token,
-                                      @RequestParam Float longitude,
-                                      @RequestParam Float latitude){
+                                      @RequestParam Double longitude,
+                                      @RequestParam Double latitude){
         locationService.setLocation(token, longitude, latitude);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/get")
-    public ResponseEntity<LocationDTO> getLocation(@RequestParam Float iLat, @RequestParam Float iLong,
-                                                   @RequestParam Float fLat, @RequestParam Float fLong){
+    public ResponseEntity<LocationDTO> getLocation(@RequestParam Double iLat, @RequestParam Double iLong,
+                                                   @RequestParam Double fLat, @RequestParam Double fLong){
         LocationDTO locations = locationService.getLocations(iLat, iLong, fLat, fLong);
         return ResponseEntity.ok(locations);
     }

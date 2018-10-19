@@ -30,6 +30,6 @@ public class Location {
     private Boolean locationStatus;
 
 
-    private Float longitude;
-    private Float latitude;
+    private Double longitude;
+    private Double latitude;
 }

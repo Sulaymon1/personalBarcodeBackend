@@ -19,7 +19,7 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
             "WHERE a.location_status=TRUE AND a.latitude >= :ilatitude AND a.latitude<= :flatitude " +
             "and a.longitude >= :ilongitude and a.longitude <= :flongitude")
     List<Location> findAllByLocationStatusIsTrueAndAttitudeStartsWithAndLongitudeStartsWith(
-            @Param("ilatitude") Float ilatitude,@Param("ilongitude") Float ilongitude,
-            @Param("flatitude") Float flatitude,@Param("flongitude") Float flongitude);
+            @Param("ilatitude") Double ilatitude,@Param("ilongitude") Double ilongitude,
+            @Param("flatitude") Double flatitude,@Param("flongitude") Double flongitude);
     Location findFirstByUser(User user);
 }

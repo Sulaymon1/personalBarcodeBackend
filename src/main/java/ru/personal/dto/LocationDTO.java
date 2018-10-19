@@ -20,6 +20,6 @@ public class LocationDTO {
     private List<String> name;
     private List<String> lastName;
     private List<String> profilePhotoPath;
-    private List<Float> longitude;
-    private List<Float> latitude;
+    private List<Double> longitude;
+    private List<Double> latitude;
 }
