@@ -81,14 +81,16 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         User guestProfile = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("user not found by <" + username + ">"));
         ControlAccessPage controlAccessPage = guestProfile.getControlAccessPage();
-        if (controlAccessPage != null) {
-            if (controlAccessPage.getIsClosed()) {
-                if (!controlAccessPage.getFriends().contains(user) && !controlAccessPage.getUsersRequest().contains(user)) {
-                    controlAccessPage.getUsersRequest().add(user);
-                    guestProfile.setControlAccessPage(controlAccessPage);
-                    userRepository.save(guestProfile);
-                }
-            }
+        if (controlAccessPage == null) {
+            controlAccessPage = new ControlAccessPage();
+            controlAccessPage.setIsClosed(false);
+            controlAccessPage.setUsersRequest(new ArrayList<>());
+            controlAccessPage.setFriends(new ArrayList<>());
+        }
+        if (!controlAccessPage.getFriends().contains(user) && !controlAccessPage.getUsersRequest().contains(user)) {
+            controlAccessPage.getUsersRequest().add(user);
+            guestProfile.setControlAccessPage(controlAccessPage);
+            userRepository.save(guestProfile);
         }
     }
 
@@ -131,7 +133,10 @@ public class ControlAccessServiceImpl implements ControlAccessService {
     public List<UserProfileDTO> getRequestedUsers(String token) {
         User user = userService.getUserByToken(token);
         ControlAccessPage controlAccessPage = user.getControlAccessPage();
-        List<UserProfileDTO> userList = new ArrayList<>();
+        if (controlAccessPage == null){
+            return null;
+        }
+        List<UserProfileDTO> userDTOList = new ArrayList<>();
         List<User> usersRequest = controlAccessPage.getUsersRequest();
         usersRequest.forEach(user1 ->{
           UserProfileDTO userDto = UserProfileDTO.builder()
@@ -144,15 +149,18 @@ public class ControlAccessServiceImpl implements ControlAccessService {
               userDto.setPhoneNumber(user1.getPhoneNumber());
               userDto.setIsClosed(false);
           }
-          userList.add(userDto);
+          userDTOList.add(userDto);
         });
-        return userList;
+        return userDTOList;
     }
 
     @Override
-    public List<User> getFollowers(String token) {
+    public List<User> getFriends(String token) {
         User user = userService.getUserByToken(token);
         ControlAccessPage controlAccessPage = user.getControlAccessPage();
+        if (controlAccessPage == null){
+            return null;
+        }
         return controlAccessPage.getFriends();
     }
 

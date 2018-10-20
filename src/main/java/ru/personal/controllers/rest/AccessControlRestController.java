@@ -37,7 +37,7 @@ public class AccessControlRestController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/deleteFollower")
+    @PostMapping("/deleteFriend")
     public ResponseEntity deleteFollower(@RequestParam String token,
                                          @RequestParam String username) throws Exception {
         controlAccessService.deleteFollower(username, token);
@@ -50,9 +50,9 @@ public class AccessControlRestController {
         return ResponseEntity.ok(users);
     }
 
-    @PostMapping("/getFollowers")
+    @PostMapping("/getFriends")
     public ResponseEntity<List<User>> getFollowers(@RequestParam String token){
-        List<User> users = controlAccessService.getFollowers(token);
+        List<User> users = controlAccessService.getFriends(token);
         return ResponseEntity.ok(users);
     }
 

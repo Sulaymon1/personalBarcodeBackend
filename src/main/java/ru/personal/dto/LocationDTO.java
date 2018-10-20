@@ -22,4 +22,5 @@ public class LocationDTO {
     private List<String> profilePhotoPath;
     private List<Double> longitude;
     private List<Double> latitude;
+    private List<Long> unixtime;
 }

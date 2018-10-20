@@ -22,7 +22,7 @@ public interface ControlAccessService {
     void deleteFollower(String username, String token) throws Exception;
 
     List<UserProfileDTO> getRequestedUsers(String token);
-    List<User> getFollowers(String token);
+    List<User> getFriends(String token);
 
     void closeProfile(String token, Boolean status);
 }

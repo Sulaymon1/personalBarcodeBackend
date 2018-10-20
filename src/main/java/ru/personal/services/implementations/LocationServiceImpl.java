@@ -10,7 +10,9 @@ import ru.personal.repositories.UserRepository;
 import ru.personal.services.interfaces.LocationService;
 import ru.personal.services.interfaces.UserService;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,10 +55,9 @@ public class LocationServiceImpl implements LocationService {
         if (location == null) {
             location = Location.builder()
                     .user(user)
-                    .longitude(longitude)
-                    .latitude(latitude)
                     .build();
         }
+        location.setUnixtime(System.currentTimeMillis()/1000L);
         location.setLatitude(latitude);
         location.setLongitude(longitude);
         locationRepository.save(location);
@@ -71,6 +72,7 @@ public class LocationServiceImpl implements LocationService {
         LocationDTO locationDTO = LocationDTO.builder()
                 .username(new ArrayList<>())
                 .lastName(new ArrayList<>())
+                .unixtime(new ArrayList<>())
                 .name(new ArrayList<>())
                 .profilePhotoPath(new ArrayList<>())
                 .longitude(new ArrayList<>())
@@ -83,8 +85,8 @@ public class LocationServiceImpl implements LocationService {
             locationDTO.getProfilePhotoPath().add(location.getUser().getProfilePhotoPath());
             locationDTO.getLongitude().add(location.getLongitude());
             locationDTO.getLatitude().add(location.getLatitude());
+            locationDTO.getUnixtime().add(location.getUnixtime());
         }
-
         return locationDTO;
     }
 }

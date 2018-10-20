@@ -32,4 +32,5 @@ public class Location {
 
     private Double longitude;
     private Double latitude;
+    private Long unixtime;
 }
