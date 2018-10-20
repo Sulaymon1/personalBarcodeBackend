@@ -27,10 +27,10 @@ public class ControlAccessPage {
     @Column(columnDefinition = "boolean default false")
     private Boolean isClosed;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> friends;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> usersRequest;
 
 }

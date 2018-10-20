@@ -102,20 +102,20 @@ public class ControlAccessServiceImpl implements ControlAccessService {
 
     @Override
     public void addNewRequestUser(String username, String token) {
-        User user = userService.getUserByToken(token);
-        User guestProfile = userRepository.findUserByUsername(username)
+        User guest = userService.getUserByToken(token);
+        User ownerProfile = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("user not found by <" + username + ">"));
-        ControlAccessPage controlAccessPage = guestProfile.getControlAccessPage();
+        ControlAccessPage controlAccessPage = ownerProfile.getControlAccessPage();
         if (controlAccessPage == null) {
             controlAccessPage = new ControlAccessPage();
             controlAccessPage.setIsClosed(false);
             controlAccessPage.setUsersRequest(new ArrayList<>());
             controlAccessPage.setFriends(new ArrayList<>());
         }
-        if (!controlAccessPage.getFriends().contains(user) && !controlAccessPage.getUsersRequest().contains(user)) {
-            controlAccessPage.getUsersRequest().add(user);
-            guestProfile.setControlAccessPage(controlAccessPage);
-            userRepository.save(guestProfile);
+        if (!controlAccessPage.getFriends().contains(guest) && !controlAccessPage.getUsersRequest().contains(guest)) {
+            controlAccessPage.getUsersRequest().add(guest);
+            ownerProfile.setControlAccessPage(controlAccessPage);
+            userRepository.save(ownerProfile);
         }
     }
 
