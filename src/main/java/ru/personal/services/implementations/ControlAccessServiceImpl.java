@@ -142,6 +142,8 @@ public class ControlAccessServiceImpl implements ControlAccessService {
 
                 if (controlAccessPage1 == null){
                     controlAccessPage1 = new ControlAccessPage();
+                    controlAccessPage1.setIsClosed(false);
+                    controlAccessPage1.setUsersRequest(new ArrayList<>());
                     controlAccessPage1.setFriends(new ArrayList<>());
                 }
                 controlAccessPage1.getFriends().add(user);
@@ -157,7 +159,11 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         User requestedUser = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new Exception("Requested user not found"));
         ControlAccessPage controlAccessPage = user.getControlAccessPage();
-        controlAccessPage.getUsersRequest().removeIf(u->u.getId().equals(requestedUser.getId()));
+        if (controlAccessPage != null){
+            controlAccessPage.getUsersRequest().removeIf(u->u.getId().equals(requestedUser.getId()));
+            user.setControlAccessPage(controlAccessPage);
+            userRepository.save(user);
+        }
     }
 
     @Override
@@ -166,7 +172,11 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         User requestedUser = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new Exception("Requested user not found"));
         ControlAccessPage controlAccessPage = user.getControlAccessPage();
-        controlAccessPage.getFriends().removeIf(u-> u.getId().equals(requestedUser.getId()));
+        if (controlAccessPage != null){
+            controlAccessPage.getFriends().removeIf(u-> u.getId().equals(requestedUser.getId()));
+            user.setControlAccessPage(controlAccessPage);
+            userRepository.save(user);
+        }
     }
 
     @Override
