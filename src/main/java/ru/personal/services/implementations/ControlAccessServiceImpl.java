@@ -178,7 +178,7 @@ public class ControlAccessServiceImpl implements ControlAccessService {
             user.setControlAccessPage(controlAccessPage);
             userRepository.save(user);
             if (controlAccessPage1 != null){
-                controlAccessPage1.getFriends().removeIf(u-> u.getId().equals(requestedUser.getId()));
+                controlAccessPage1.getFriends().removeIf(u-> u.getId().equals(user.getId()));
                 requestedUser.setControlAccessPage(controlAccessPage1);
                 userRepository.save(requestedUser);
             }

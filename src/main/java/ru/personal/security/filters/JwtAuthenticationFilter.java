@@ -33,8 +33,6 @@ public class JwtAuthenticationFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String token = request.getParameter(tokenHeader);
-        System.out.println("token: ");
-        System.out.println(token);
 
         Authentication authentication;
         if (token == null){
