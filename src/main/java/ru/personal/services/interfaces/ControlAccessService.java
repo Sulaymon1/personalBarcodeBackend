@@ -1,9 +1,7 @@
 package ru.personal.services.interfaces;
 
+import ru.personal.dto.UserDTO;
 import ru.personal.dto.UserProfileDTO;
-import ru.personal.models.User;
-
-import java.util.List;
 
 /**
  * Date 26.09.2018
@@ -21,8 +19,8 @@ public interface ControlAccessService {
 
     void deleteFollower(String username, String token) throws Exception;
 
-    List<UserProfileDTO> getRequestedUsers(String token);
-    List<User> getFriends(String token);
+    UserDTO getRequestedUsers(String token);
+    UserDTO getFriends(String token);
 
     void closeProfile(String token, Boolean status);
 }

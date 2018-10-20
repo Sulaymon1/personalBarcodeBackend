@@ -1,12 +1,11 @@
 package ru.personal.controllers.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.personal.constants.Image;
 import ru.personal.dto.UserProfileDTO;
-import ru.personal.dto.GuestDto;
+import ru.personal.dto.UserDTO;
 import ru.personal.models.User;
 import ru.personal.repositories.UserRepository;
 import ru.personal.security.JwtTokenUtil;
@@ -14,10 +13,8 @@ import ru.personal.services.interfaces.FileInfoService;
 import ru.personal.services.interfaces.UserService;
 
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -162,7 +159,7 @@ public class UserRestController {
 
 
     @GetMapping("/getGuests")
-    public ResponseEntity<GuestDto> getGuests(String token){
+    public ResponseEntity<UserDTO> getGuests(String token){
        return ResponseEntity.ok(userService.getUserGuests(token));
     }
 }

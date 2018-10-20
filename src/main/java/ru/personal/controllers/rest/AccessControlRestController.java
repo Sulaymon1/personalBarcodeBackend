@@ -3,7 +3,7 @@ package ru.personal.controllers.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.personal.dto.UserProfileDTO;
+import ru.personal.dto.UserDTO;
 import ru.personal.models.User;
 import ru.personal.services.interfaces.ControlAccessService;
 
@@ -44,16 +44,16 @@ public class AccessControlRestController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/getRequestedUsers")
-    public ResponseEntity<List<UserProfileDTO>> getRequestedUsers(@RequestParam String token){
-        List<UserProfileDTO> users = controlAccessService.getRequestedUsers(token);
-        return ResponseEntity.ok(users);
+    @GetMapping("/getRequestedUsers")
+    public ResponseEntity<UserDTO> getRequestedUsers(@RequestParam String token){
+        UserDTO userDTO = controlAccessService.getRequestedUsers(token);
+        return ResponseEntity.ok(userDTO);
     }
 
     @PostMapping("/getFriends")
-    public ResponseEntity<List<User>> getFollowers(@RequestParam String token){
-        List<User> users = controlAccessService.getFriends(token);
-        return ResponseEntity.ok(users);
+    public ResponseEntity<UserDTO> getFollowers(@RequestParam String token){
+        UserDTO userDTO = controlAccessService.getFriends(token);
+        return ResponseEntity.ok(userDTO);
     }
 
     @PostMapping("/privateProfile")

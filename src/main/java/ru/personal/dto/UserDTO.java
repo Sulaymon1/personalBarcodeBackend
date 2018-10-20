@@ -1,6 +1,7 @@
 package ru.personal.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,11 +18,12 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class GuestDto {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UserDTO {
     private List<String> profilePhoto;
     private List<String> lastname;
     private List<String> name;
     private List<String> username;
     @JsonFormat(pattern = "YYYY-MM-dd")
-    private List<LocalDateTime> date;
+    private List<Long> date;
 }

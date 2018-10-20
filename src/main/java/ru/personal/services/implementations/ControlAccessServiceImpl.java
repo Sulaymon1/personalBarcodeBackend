@@ -2,6 +2,7 @@ package ru.personal.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.personal.dto.UserDTO;
 import ru.personal.dto.UserProfileDTO;
 import ru.personal.models.Advertisement;
 import ru.personal.models.ControlAccessPage;
@@ -57,12 +58,12 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         return getUserDTO(guestProfile);
     }
 
-    private void saveGuest(User guest, User user){
+    private void saveGuest(User guestUser, User user){
         Guest guestP = Guest.builder()
-                .enteredDate(LocalDateTime.now())
-                .guest(guest)
+                .enteredDate(System.currentTimeMillis()/1000L)
+                .guest(guestUser)
                 .build();
-        List<Guest> guests = user.getGuests();
+        List<Guest> guests = guestUser.getGuests();
         if (guests == null){
             guests = new ArrayList<>();
         }
@@ -70,9 +71,8 @@ public class ControlAccessServiceImpl implements ControlAccessService {
             guests.remove(0);
         }
         guests.add(guestP);
-        user.setGuests(guests);
-
-        userRepository.save(user);
+        guestUser.setGuests(guests);
+        userRepository.save(guestUser);
     }
 
     @Override
@@ -100,6 +100,9 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         User requestedUser = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new Exception("Requested user not found"));
         ControlAccessPage controlAccessPage = user.getControlAccessPage();
+        if (controlAccessPage == null){
+            return;
+        }
         // if guest user is requested then do guest user role is follower
         if(controlAccessPage.getUsersRequest().contains(requestedUser)){
             controlAccessPage.getUsersRequest().remove(requestedUser);
@@ -130,38 +133,49 @@ public class ControlAccessServiceImpl implements ControlAccessService {
     }
 
     @Override
-    public List<UserProfileDTO> getRequestedUsers(String token) {
+    public UserDTO getRequestedUsers(String token) {
         User user = userService.getUserByToken(token);
         ControlAccessPage controlAccessPage = user.getControlAccessPage();
         if (controlAccessPage == null){
             return null;
         }
-        List<UserProfileDTO> userDTOList = new ArrayList<>();
+        UserDTO userDTO = UserDTO.builder()
+                .lastname(new ArrayList<>())
+                .name(new ArrayList<>())
+                .profilePhoto(new ArrayList<>())
+                .username(new ArrayList<>())
+                .build();
         List<User> usersRequest = controlAccessPage.getUsersRequest();
         usersRequest.forEach(user1 ->{
-          UserProfileDTO userDto = UserProfileDTO.builder()
-                   .lastName(user1.getLastName())
-                   .name(user1.getName())
-                   .username(user1.getUsername())
-                   .isClosed(true)
-                   .build();
-          if (user1.getControlAccessPage()== null || user1.getControlAccessPage()!=null && !user1.getControlAccessPage().getIsClosed()){
-              userDto.setPhoneNumber(user1.getPhoneNumber());
-              userDto.setIsClosed(false);
-          }
-          userDTOList.add(userDto);
+            userDTO.getLastname().add(user1.getLastName());
+            userDTO.getName().add(user1.getName());
+            userDTO.getProfilePhoto().add(user1.getProfilePhotoPath());
+            userDTO.getUsername().add(user1.getUsername());
         });
-        return userDTOList;
+        return userDTO;
     }
 
     @Override
-    public List<User> getFriends(String token) {
+    public UserDTO getFriends(String token) {
         User user = userService.getUserByToken(token);
         ControlAccessPage controlAccessPage = user.getControlAccessPage();
         if (controlAccessPage == null){
             return null;
         }
-        return controlAccessPage.getFriends();
+        List<User> friends = controlAccessPage.getFriends();
+        UserDTO userDTO = UserDTO.builder()
+                    .lastname(new ArrayList<>())
+                    .name(new ArrayList<>())
+                    .profilePhoto(new ArrayList<>())
+                    .username(new ArrayList<>())
+                    .build();
+        friends.forEach(user1 -> {
+                userDTO.getLastname().add(user1.getLastName());
+                userDTO.getName().add(user1.getName());
+                userDTO.getProfilePhoto().add(user1.getProfilePhotoPath());
+                userDTO.getUsername().add(user1.getUsername());
+            });
+        return userDTO;
     }
 
     @Override

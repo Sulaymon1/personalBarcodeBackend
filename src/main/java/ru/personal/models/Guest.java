@@ -31,5 +31,5 @@ public class Guest {
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private User guest;
 
-    private LocalDateTime enteredDate;
+    private Long enteredDate;
 }

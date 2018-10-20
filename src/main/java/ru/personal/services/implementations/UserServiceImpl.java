@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.personal.constants.Image;
-import ru.personal.dto.GuestDto;
+import ru.personal.dto.UserDTO;
 import ru.personal.dto.UserProfileDTO;
 import ru.personal.mapper.UserMapper;
 import ru.personal.models.Guest;
@@ -16,7 +16,6 @@ import ru.personal.security.JwtTokenUtil;
 import ru.personal.services.interfaces.FileInfoService;
 import ru.personal.services.interfaces.UserService;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,15 +84,14 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public GuestDto getUserGuests(String token) {
+    public UserDTO getUserGuests(String token) {
         User user = getUserByToken(token);
         List<Guest> guests = user.getGuests();
-        List<GuestDto> guestDtoList = new ArrayList<>();
         if (guests != null){
             List<String> lastName = new ArrayList<>();
             List<String> name = new ArrayList<>();
             List<String> profilePhoto = new ArrayList<>();
-            List<LocalDateTime> date = new ArrayList<>();
+            List<Long> date = new ArrayList<>();
             List<String> username = new ArrayList<>();
             guests.forEach(guest -> {
                 User userGuest = guest.getGuest();
@@ -103,14 +101,14 @@ public class UserServiceImpl implements UserService {
                 date.add(guest.getEnteredDate());
                 username.add(userGuest.getUsername());
             });
-            GuestDto guestDto = GuestDto.builder()
+            UserDTO userDTO = UserDTO.builder()
                     .lastname(lastName)
                     .name(name)
                     .profilePhoto(profilePhoto)
                     .date(date)
                     .username(username)
                     .build();
-            return guestDto;
+            return userDTO;
         }
         return null;
     }
