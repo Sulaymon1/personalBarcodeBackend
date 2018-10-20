@@ -107,26 +107,18 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         User ownerProfile = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("user not found by <" + username + ">"));
         ControlAccessPage controlAccessPage = ownerProfile.getControlAccessPage();
-        ControlAccessPage controlAccessPage1 = guest.getControlAccessPage();
         if (controlAccessPage == null) {
             controlAccessPage = new ControlAccessPage();
             controlAccessPage.setIsClosed(false);
             controlAccessPage.setUsersRequest(new ArrayList<>());
             controlAccessPage.setFriends(new ArrayList<>());
         }
-        if (controlAccessPage1 == null) {
-            controlAccessPage1 = new ControlAccessPage();
-            controlAccessPage1.setIsClosed(false);
-            controlAccessPage1.setUsersRequest(new ArrayList<>());
-            controlAccessPage1.setFriends(new ArrayList<>());
-        }
+
 
         if (!controlAccessPage.getFriends().contains(guest) && !controlAccessPage.getUsersRequest().contains(guest)) {
             controlAccessPage.getUsersRequest().add(guest);
             ownerProfile.setControlAccessPage(controlAccessPage);
             userRepository.save(ownerProfile);
-            guest.setControlAccessPage(controlAccessPage1);
-            userRepository.save(guest);
         }
     }
 
