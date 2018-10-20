@@ -23,4 +23,6 @@ public interface ControlAccessService {
     UserDTO getFriends(String token);
 
     void closeProfile(String token, Boolean status);
+
+    void cancelRequest(String username, String token) throws Exception;
 }

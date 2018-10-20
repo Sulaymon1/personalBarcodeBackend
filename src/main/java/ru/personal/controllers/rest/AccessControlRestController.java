@@ -41,6 +41,15 @@ public class AccessControlRestController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/cancelRequest")
+    public ResponseEntity cancelRequest(@RequestParam String token,
+                                         @RequestParam String username) throws Exception {
+        controlAccessService.cancelRequest(username, token);
+        return ResponseEntity.ok().build();
+    }
+
+
+
     @GetMapping("/getRequestedUsers")
     public ResponseEntity<UserDTO> getRequestedUsers(@RequestParam String token){
         UserDTO userDTO = controlAccessService.getRequestedUsers(token);

@@ -172,10 +172,28 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         User requestedUser = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new Exception("Requested user not found"));
         ControlAccessPage controlAccessPage = user.getControlAccessPage();
+        ControlAccessPage controlAccessPage1 = requestedUser.getControlAccessPage();
         if (controlAccessPage != null){
             controlAccessPage.getFriends().removeIf(u-> u.getId().equals(requestedUser.getId()));
             user.setControlAccessPage(controlAccessPage);
             userRepository.save(user);
+            if (controlAccessPage1 != null){
+                controlAccessPage1.getFriends().removeIf(u-> u.getId().equals(requestedUser.getId()));
+                requestedUser.setControlAccessPage(controlAccessPage1);
+                userRepository.save(requestedUser);
+            }
+        }
+    }
+    @Override
+    public void cancelRequest(String username, String token) throws Exception {
+        User user = userService.getUserByToken(token);
+        User requestedUser = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new Exception("Requested user not found"));
+        ControlAccessPage controlAccessPage1 = requestedUser.getControlAccessPage();
+        if (controlAccessPage1 != null){
+            controlAccessPage1.getUsersRequest().removeIf(u-> u.getId().equals(user.getId()));
+            requestedUser.setControlAccessPage(controlAccessPage1);
+            userRepository.save(requestedUser);
         }
     }
 
@@ -224,6 +242,7 @@ public class ControlAccessServiceImpl implements ControlAccessService {
             });
         return userDTO;
     }
+
 
     @Override
     public void closeProfile(String token, Boolean status) {
