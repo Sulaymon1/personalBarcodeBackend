@@ -128,6 +128,7 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         User requestedUser = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new Exception("Requested user not found"));
         ControlAccessPage controlAccessPage = user.getControlAccessPage();
+        ControlAccessPage controlAccessPage1 = requestedUser.getControlAccessPage();
         if (controlAccessPage == null){
             return;
         }
@@ -138,6 +139,14 @@ public class ControlAccessServiceImpl implements ControlAccessService {
                 controlAccessPage.getFriends().add(requestedUser);
                 user.setControlAccessPage(controlAccessPage);
                 userRepository.save(user);
+
+                if (controlAccessPage1 == null){
+                    controlAccessPage1 = new ControlAccessPage();
+                    controlAccessPage1.setFriends(new ArrayList<>());
+                }
+                controlAccessPage1.getFriends().add(user);
+                requestedUser.setControlAccessPage(controlAccessPage1);
+                userRepository.save(requestedUser);
             }
         }
     }
