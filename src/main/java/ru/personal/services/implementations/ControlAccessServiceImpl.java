@@ -88,9 +88,13 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         if (guests.size()>30){
             guests.remove(0);
         }
-        Guest guest1 = guests.get(guests.size() - 1);
-        if (!guest1.getGuest().equals(guest)){
+        if (guests.size() == 0){
             guests.add(guestP);
+        }else {
+            Guest guest1 = guests.get(guests.size()-1);
+            if (!guest1.getGuest().equals(guest)){
+                guests.add(guestP);
+            }
         }
         ownerProfile.setGuests(guests);
         userRepository.save(ownerProfile);
