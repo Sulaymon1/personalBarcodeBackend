@@ -17,7 +17,7 @@ public interface ControlAccessService {
 
     void decline(String username, String token) throws Exception;
 
-    void deleteFollower(String username, String token) throws Exception;
+    void deleteFriend(String username, String token) throws Exception;
 
     UserDTO getRequestedUsers(String token);
     UserDTO getFriends(String token);

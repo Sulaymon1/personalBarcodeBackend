@@ -2,6 +2,7 @@ package ru.personal.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.personal.constants.FriendStatus;
 import ru.personal.dto.UserDTO;
 import ru.personal.dto.UserProfileDTO;
 import ru.personal.models.Advertisement;
@@ -14,7 +15,6 @@ import ru.personal.security.JwtTokenUtil;
 import ru.personal.services.interfaces.ControlAccessService;
 import ru.personal.services.interfaces.UserService;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -22,6 +22,7 @@ import java.util.*;
  *
  * @author Hursanov Sulaymon
  * @version v1.0
+ *
  **/
 @Service
 public class ControlAccessServiceImpl implements ControlAccessService {
@@ -40,42 +41,59 @@ public class ControlAccessServiceImpl implements ControlAccessService {
 
     @Override
     public UserProfileDTO getUserProfile(String username, String token) {
-        User user = userService.getUserByToken(token);
-        User guestProfile = userRepository.findUserByUsername(username)
+        User guest = userService.getUserByToken(token);
+        User ownerProfile = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("user not found by <"+username+">"));
-        saveGuest(guestProfile, user);
-        ControlAccessPage controlAccessPage = guestProfile.getControlAccessPage();
+        saveGuest(ownerProfile, guest);
+        ControlAccessPage controlAccessPage = ownerProfile.getControlAccessPage();
         if (controlAccessPage != null){
             if (controlAccessPage.getIsClosed()){
-                if(controlAccessPage.getFriends().contains(user)){
-                    return getUserDTO(guestProfile);
-                }else if (controlAccessPage.getUsersRequest().contains(user))
-                    return getPrivateUserDTO(guestProfile, true);
-                else
-                    return getPrivateUserDTO(guestProfile, false);
+                if (friendStatus(ownerProfile, guest) == FriendStatus.FRIENDS){
+                    return getUserDTO(ownerProfile, FriendStatus.FRIENDS);
+                }else {
+                    return getPrivateUserDTO(ownerProfile, friendStatus(ownerProfile, guest));
+                }
             }
         }
-        return getUserDTO(guestProfile);
+        return getUserDTO(ownerProfile, friendStatus(ownerProfile, guest));
     }
 
-    private void saveGuest(User guestUser, User user){
-        if (user.equals(guestUser)){
+    private FriendStatus friendStatus(User ownerProfile, User guest){
+        ControlAccessPage controlAccessPage = ownerProfile.getControlAccessPage();
+        ControlAccessPage controlAccessPage1 = guest.getControlAccessPage();
+        if (controlAccessPage != null){
+            if(controlAccessPage.getFriends().contains(guest))
+                return FriendStatus.FRIENDS;
+            else if (controlAccessPage.getUsersRequest().contains(guest))
+                return FriendStatus.REQUEST_SENT;
+            else if (controlAccessPage1 != null && controlAccessPage1.getUsersRequest().contains(ownerProfile))
+                return FriendStatus.REPLY_REQUEST;
+
+        }
+        return FriendStatus.SEND_REQUEST;
+    }
+
+    private void saveGuest(User ownerProfile, User guest){
+        if (guest.equals(ownerProfile)){
             return;
         }
         Guest guestP = Guest.builder()
                 .enteredDate(System.currentTimeMillis()/1000L)
-                .guest(user)
+                .guest(guest)
                 .build();
-        List<Guest> guests = guestUser.getGuests();
+        List<Guest> guests = ownerProfile.getGuests();
         if (guests == null){
             guests = new ArrayList<>();
         }
-        if (guests.size()>10){
+        if (guests.size()>30){
             guests.remove(0);
         }
-        guests.add(guestP);
-        guestUser.setGuests(guests);
-        userRepository.save(guestUser);
+        Guest guest1 = guests.get(guests.size() - 1);
+        if (!guest1.getGuest().equals(guest)){
+            guests.add(guestP);
+        }
+        ownerProfile.setGuests(guests);
+        userRepository.save(ownerProfile);
     }
 
     @Override
@@ -127,7 +145,7 @@ public class ControlAccessServiceImpl implements ControlAccessService {
     }
 
     @Override
-    public void deleteFollower(String username, String token) throws Exception {
+    public void deleteFriend(String username, String token) throws Exception {
         User user = userService.getUserByToken(token);
         User requestedUser = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new Exception("Requested user not found"));
@@ -193,7 +211,7 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         userRepository.save(user);
     }
 
-    private UserProfileDTO getUserDTO(User user){
+    private UserProfileDTO getUserDTO(User user, FriendStatus friendStatus){
         Advertisement advertisement = advertisementRepository.findFirstByUserId(user.getId()).orElse(null);
         return UserProfileDTO.builder()
                 .name(user.getName())
@@ -211,11 +229,12 @@ public class ControlAccessServiceImpl implements ControlAccessService {
                 .bCountry(user.getBCountry())
                 .bExtra(user.getBExtra())
                 .status(user.getStatus())
+                .friendStatus(friendStatus)
                 .withUsername(user.getWithUsername())
                 .build();
     }
 
-    private UserProfileDTO getPrivateUserDTO(User guestProfile, Boolean isRequested){
+    private UserProfileDTO getPrivateUserDTO(User guestProfile, FriendStatus friendStatus){
         return UserProfileDTO
                 .builder()
                 .username(guestProfile.getUsername())
@@ -224,7 +243,7 @@ public class ControlAccessServiceImpl implements ControlAccessService {
                 .qrImagePath(guestProfile.getQrImagePath())
                 .profilePhotoPath(guestProfile.getProfilePhotoPath())
                 .coverPhotoPath(guestProfile.getCoverPhotoPath())
-                .isRequested(isRequested)
+                .friendStatus(friendStatus)
                 .build();
     }
 }

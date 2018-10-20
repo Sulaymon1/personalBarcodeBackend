@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.personal.dto.UserDTO;
-import ru.personal.models.User;
 import ru.personal.services.interfaces.ControlAccessService;
-
-import java.util.List;
 
 /**
  * Date 26.09.2018
@@ -38,9 +35,9 @@ public class AccessControlRestController {
     }
 
     @PostMapping("/deleteFriend")
-    public ResponseEntity deleteFollower(@RequestParam String token,
+    public ResponseEntity deleteFriend(@RequestParam String token,
                                          @RequestParam String username) throws Exception {
-        controlAccessService.deleteFollower(username, token);
+        controlAccessService.deleteFriend(username, token);
         return ResponseEntity.ok().build();
     }
 

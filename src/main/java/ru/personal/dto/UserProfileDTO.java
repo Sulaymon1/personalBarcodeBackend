@@ -2,7 +2,9 @@ package ru.personal.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.*;
+import ru.personal.constants.FriendStatus;
 import ru.personal.models.Advertisement;
 import ru.personal.models.SocialNetwork;
 
@@ -45,8 +47,7 @@ public class UserProfileDTO {
     private Boolean locationStatus;
 
     private List<SocialNetwork> socialNetwork;
-    private Boolean isRequested;
-
+    private FriendStatus friendStatus;
     private Boolean isClosed;
 
 }
