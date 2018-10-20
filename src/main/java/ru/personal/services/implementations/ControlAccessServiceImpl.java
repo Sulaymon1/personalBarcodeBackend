@@ -59,9 +59,12 @@ public class ControlAccessServiceImpl implements ControlAccessService {
     }
 
     private void saveGuest(User guestUser, User user){
+        if (user.equals(guestUser)){
+            return;
+        }
         Guest guestP = Guest.builder()
                 .enteredDate(System.currentTimeMillis()/1000L)
-                .guest(guestUser)
+                .guest(user)
                 .build();
         List<Guest> guests = guestUser.getGuests();
         if (guests == null){

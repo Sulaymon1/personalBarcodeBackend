@@ -50,7 +50,7 @@ public class AccessControlRestController {
         return ResponseEntity.ok(userDTO);
     }
 
-    @PostMapping("/getFriends")
+    @GetMapping("/getFriends")
     public ResponseEntity<UserDTO> getFollowers(@RequestParam String token){
         UserDTO userDTO = controlAccessService.getFriends(token);
         return ResponseEntity.ok(userDTO);
