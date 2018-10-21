@@ -16,9 +16,9 @@ import ru.personal.security.JwtTokenUtil;
 import ru.personal.services.interfaces.FileInfoService;
 import ru.personal.services.interfaces.UserService;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Date 03.07.2018
@@ -50,6 +50,11 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user1);
         }else
             userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
     }
 
     @Override

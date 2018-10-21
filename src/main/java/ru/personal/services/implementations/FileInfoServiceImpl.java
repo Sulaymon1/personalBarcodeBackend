@@ -32,9 +32,13 @@ public class FileInfoServiceImpl implements FileInfoService {
     @Value("${storage.advertisementPhotoPath}")
     private String advertisementPhotoPath;
 
+    @Value("${storage.groupPhotoPath}")
+    private String groupPhotoPath;
+
     @Override
     public String getImageBase64(String fileName, Image image){
-        String encodedString = null;
+        if (fileName != null){
+            String encodedString = null;
             try {
                 byte[] bytes = new byte[0];
                 if (image.equals(Image.Photo)) {
@@ -44,9 +48,11 @@ public class FileInfoServiceImpl implements FileInfoService {
                 }
                 encodedString = Base64.getEncoder().encodeToString(bytes);
             }catch (Exception e){
-                    e.printStackTrace();
-                }
-        return encodedString;
+                e.printStackTrace();
+            }
+            return encodedString;
+        }
+        return null;
     }
 
     @Override
@@ -67,6 +73,10 @@ public class FileInfoServiceImpl implements FileInfoService {
                 file = new File(coverPhotoPath + newFileName + ".jpeg");
             }else if (imageType.equals(Image.AdvertisementPic)){
                 file = new File(advertisementPhotoPath + newFileName + ".jpeg");
+            }else if (imageType.equals(Image.GroupPhoto)){
+                String pathname = groupPhotoPath + newFileName + ".jpeg";
+                System.out.println(pathname);
+                file = new File(pathname);
             }
             file.mkdir();
             ImageIO.write(image, "jpeg", file);
@@ -89,6 +99,8 @@ public class FileInfoServiceImpl implements FileInfoService {
                 file = new File(coverPhotoPath + fileName + ".jpeg");
             }else if (photoType.equals("advertisementPhoto")){
                 file = new File(advertisementPhotoPath + fileName + ".jpeg");
+            }else if (photoType.equals("groupPhoto")){
+                file = new File(groupPhotoPath + fileName + ".jpeg");
             }
             if (file.exists()) {
                 InputStream is;
