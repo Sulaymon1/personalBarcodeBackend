@@ -46,6 +46,10 @@ public class UserProfileDTO {
 
     private Boolean locationStatus;
 
+    private Double longitude;
+    private Double latitude;
+    private Long locationTime; // unixtime
+
     private List<SocialNetwork> socialNetwork;
     private FriendStatus friendStatus;
     private Boolean isClosed;

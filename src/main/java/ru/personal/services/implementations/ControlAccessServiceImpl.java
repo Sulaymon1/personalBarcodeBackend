@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.personal.constants.FriendStatus;
 import ru.personal.dto.UserDTO;
 import ru.personal.dto.UserProfileDTO;
-import ru.personal.models.Advertisement;
-import ru.personal.models.ControlAccessPage;
-import ru.personal.models.Guest;
-import ru.personal.models.User;
+import ru.personal.models.*;
 import ru.personal.repositories.AdvertisementRepository;
 import ru.personal.repositories.UserRepository;
 import ru.personal.security.JwtTokenUtil;
@@ -258,6 +255,11 @@ public class ControlAccessServiceImpl implements ControlAccessService {
 
     private UserProfileDTO getUserDTO(User user, FriendStatus friendStatus){
         Advertisement advertisement = advertisementRepository.findFirstByUserId(user.getId()).orElse(null);
+        Location location = user.getLocation();
+        Boolean locationStatus = null;
+        if (location != null){
+            locationStatus = location.getLocationStatus();
+        }
         return UserProfileDTO.builder()
                 .name(user.getName())
                 .lastName(user.getLastName())
@@ -274,6 +276,10 @@ public class ControlAccessServiceImpl implements ControlAccessService {
                 .bCountry(user.getBCountry())
                 .bExtra(user.getBExtra())
                 .status(user.getStatus())
+                .locationStatus(locationStatus)
+                .longitude(locationStatus!=null&&locationStatus?location.getLongitude():null)
+                .latitude(locationStatus!= null&&locationStatus? location.getLatitude():null)
+                .locationTime(locationStatus!=null&&locationStatus? location.getUnixtime(): null)
                 .friendStatus(friendStatus)
                 .withUsername(user.getWithUsername())
                 .build();
