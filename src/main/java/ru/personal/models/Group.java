@@ -31,7 +31,7 @@ public class Group {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private User admin;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> members;
 
     private String groupPhoto;
