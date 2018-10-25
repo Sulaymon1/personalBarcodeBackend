@@ -21,6 +21,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
             "WHERE g2.members_id = :userID")
     List<Group> findAllByMembersIn(@Param("userID") Long userID);
     Optional<Group> findFirstByGroupIDAndAdmin_Id(Long groupID, Long adminID);
+    Optional<Group> findFirstByGroupIDAndAdmin_IdOrMembersContains(Long groupID, Long adminID, Long userId);
     void removeByGroupID(Long groupID);
     Optional<Group> findFirstByGroupID(Long groupID);
 }
