@@ -220,12 +220,21 @@ public class GroupServiceImpl implements GroupService {
     public GroupListDTO getGroups(String token) {
         User user = userService.getUserByToken(token);
         List<Group> groups = groupRepository.findAllByMembersInOrAdmin(user.getId());
+        List<Group> allByAdmin = groupRepository.findAllByAdmin(user);
         GroupListDTO groupListDTO = GroupListDTO.builder()
                 .groupID(new ArrayList<>())
                 .title(new ArrayList<>())
                 .groupPhoto(new ArrayList<>())
                 .membersCount(new ArrayList<>())
                 .build();
+        allByAdmin.forEach(group -> {
+            groupListDTO.getGroupID().add(group.getGroupID());
+            groupListDTO.getTitle().add(group.getTitle());
+            groupListDTO.getGroupPhoto().add(group.getGroupPhoto());
+            if (group.getMembers()!=null){
+                groupListDTO.getMembersCount().add((long) group.getMembers().size());
+            }
+        });
         groups.forEach(group -> {
             groupListDTO.getGroupID().add(group.getGroupID());
             groupListDTO.getTitle().add(group.getTitle());
@@ -234,6 +243,7 @@ public class GroupServiceImpl implements GroupService {
                 groupListDTO.getMembersCount().add((long) group.getMembers().size());
             }
         });
+
         return groupListDTO;
     }
 }
