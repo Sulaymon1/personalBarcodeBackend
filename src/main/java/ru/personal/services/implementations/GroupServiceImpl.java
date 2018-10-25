@@ -158,6 +158,7 @@ public class GroupServiceImpl implements GroupService {
             Group group = groupOptional.get();
             if (group.getAdmin().equals(user)) {
                 return GroupDTO.builder()
+                        .adminUsername(user.getUsername())
                         .groupID(groupID)
                         .title(group.getTitle())
                         .groupPhoto(group.getGroupPhoto())
@@ -167,7 +168,9 @@ public class GroupServiceImpl implements GroupService {
                         .meetingTime(group.getMeetingTime())
                         .build();
             }else if (group.getMembers() != null && group.getMembers().contains(user)){
+                User admin = group.getAdmin();
                 return GroupDTO.builder()
+                        .adminUsername(admin.getUsername())
                         .groupID(groupID)
                         .title(group.getTitle())
                         .groupPhoto(group.getGroupPhoto())
@@ -187,6 +190,7 @@ public class GroupServiceImpl implements GroupService {
         Optional<Group> groupOptional = groupRepository.findFirstByGroupID(groupID);
         if (groupOptional.isPresent()){
             Group group = groupOptional.get();
+            User admin = group.getAdmin();
             if (group.getMembers().contains(user) || group.getAdmin().equals(user)){
                 UserDTO userDTO = UserDTO.builder()
                         .name(new ArrayList<>())
@@ -194,12 +198,18 @@ public class GroupServiceImpl implements GroupService {
                         .profilePhoto(new ArrayList<>())
                         .username(new ArrayList<>())
                         .build();
+
+                userDTO.getName().add(admin.getName());
+                userDTO.getLastname().add(admin.getLastName());
+                userDTO.getProfilePhoto().add(admin.getProfilePhotoPath());
+                userDTO.getUsername().add(admin.getUsername());
                 group.getMembers().forEach(member ->{
                     userDTO.getName().add(member.getName());
                     userDTO.getLastname().add(member.getLastName());
                     userDTO.getProfilePhoto().add(member.getProfilePhotoPath());
                     userDTO.getUsername().add(member.getUsername());
                 });
+
                 return userDTO;
             }
         }
@@ -209,7 +219,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupListDTO getGroups(String token) {
         User user = userService.getUserByToken(token);
-        List<Group> groups = groupRepository.findAllByMembersIn(user.getId());
+        List<Group> groups = groupRepository.findAllByMembersInOrAdmin(user.getId());
         GroupListDTO groupListDTO = GroupListDTO.builder()
                 .groupID(new ArrayList<>())
                 .title(new ArrayList<>())

@@ -21,6 +21,7 @@ public class GroupDTO {
     private Long groupID;
 
     private Boolean isAdmin;
+    private String adminUsername;
 
     private String groupPhoto;
     private Double longitude; // setting meeting

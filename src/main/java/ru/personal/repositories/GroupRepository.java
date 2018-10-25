@@ -19,7 +19,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM groups g " +
             "LEFT JOIN groups_members g2 ON g.id=g2.group_id " +
             "WHERE g2.members_id = :userID")
-    List<Group> findAllByMembersIn(@Param("userID") Long userID);
+    List<Group> findAllByMembersInOrAdmin(@Param("userID") Long userID);
     Optional<Group> findFirstByGroupIDAndAdmin_Id(Long groupID, Long adminID);
     Optional<Group> findFirstByGroupIDAndAdmin_IdOrMembersContains(Long groupID, Long adminID, Long userId);
     void removeByGroupID(Long groupID);
