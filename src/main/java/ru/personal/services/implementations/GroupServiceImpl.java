@@ -48,7 +48,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void createGroup(GroupForm groupForm) {
+    public Long createGroup(GroupForm groupForm) {
         User user = userService.getUserByToken(groupForm.getToken());
 
         List<User> members = user.getControlAccessPage().getFriends()
@@ -66,7 +66,8 @@ public class GroupServiceImpl implements GroupService {
                 .build();
         Optional<Group> existingGroup = groupRepository.findFirstByGroupID(group.getGroupID());
         if (!existingGroup.isPresent()){
-            groupRepository.save(group);
+            Group save = groupRepository.save(group);
+            return save.getGroupID();
         }else {
             createGroup(groupForm); // if group exist then recreate group with other random number
         }

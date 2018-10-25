@@ -12,7 +12,7 @@ import ru.personal.form.GroupForm;
  * @version v1.0
  **/
 public interface GroupService {
-    void createGroup(GroupForm groupForm);
+    Long createGroup(GroupForm groupForm);
     void addUser(String token, Long groupID, String username) throws Exception;
     void deleteUser(String token, Long groupID, String username) throws Exception;
     void setMeetingLocation(String token, Long groupID, Double longitude, Double latitude, Long meetingTime) throws Exception;

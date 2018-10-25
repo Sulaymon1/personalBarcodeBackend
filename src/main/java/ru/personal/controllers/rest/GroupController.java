@@ -24,8 +24,8 @@ public class GroupController {
 
     @PostMapping(value = "/create", consumes = "application/json")
     public ResponseEntity createGroup(@RequestBody GroupForm groupForm){
-        groupService.createGroup(groupForm);
-        return ResponseEntity.ok().build();
+        Long groupId = groupService.createGroup(groupForm);
+        return ResponseEntity.ok("{\"groupID\":"+"\""+groupId+"\"}");
     }
 
     @PostMapping("/addMember")
