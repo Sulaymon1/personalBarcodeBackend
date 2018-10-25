@@ -80,7 +80,10 @@ public class GroupServiceImpl implements GroupService {
             if (group.getMembers() == null){
                 group.setMembers(new ArrayList<>());
             }
-            group.getMembers().add(memberOptional.get());
+            User user = memberOptional.get();
+            if (!group.getMembers().contains(user))
+                group.getMembers().add(user);
+            groupRepository.save(group);
         }
     }
 
@@ -125,7 +128,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void changeGroupPhoto(String token, Long groupID, String imgBase64GroupPhoto) throws Exception {
         User user = jwtTokenUtil.getUserFromToken(token);
-        Group group = groupRepository.findFirstByGroupIDAndAdmin_IdOrMembersContains(groupID, user.getId(), user.getId())
+        Group group = groupRepository.findFirstByGroupIDAndAdmin_Id(groupID, user.getId())
                 .orElseThrow(()-> new Exception("group not found in change photo group method"));
         if (group != null){
             String groupPhoto = fileInfoService.savePicture(imgBase64GroupPhoto, Image.GroupPhoto);
