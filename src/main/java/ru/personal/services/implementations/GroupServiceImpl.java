@@ -71,6 +71,7 @@ public class GroupServiceImpl implements GroupService {
         }else {
             createGroup(groupForm); // if group exist then recreate group with other random number
         }
+        return null;
     }
 
     @Override
