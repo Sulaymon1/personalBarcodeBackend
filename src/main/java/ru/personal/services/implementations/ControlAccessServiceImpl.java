@@ -230,8 +230,10 @@ public class ControlAccessServiceImpl implements ControlAccessService {
                     .name(new ArrayList<>())
                     .profilePhoto(new ArrayList<>())
                     .username(new ArrayList<>())
+                    .userPhoneNumbers(new ArrayList<>())
                     .build();
         friends.forEach(user1 -> {
+                userDTO.getUserPhoneNumbers().add(user1.getPhoneNumber());
                 userDTO.getLastname().add(user1.getLastName());
                 userDTO.getName().add(user1.getName());
                 userDTO.getProfilePhoto().add(user1.getProfilePhotoPath());

@@ -26,4 +26,7 @@ public class UserDTO {
     private List<String> username;
     @JsonFormat(pattern = "YYYY-MM-dd")
     private List<Long> date;
+    private List<Double> latitude;
+    private List<Double> longitude;
+    private List<String> userPhoneNumbers;
 }

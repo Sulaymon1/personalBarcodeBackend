@@ -202,13 +202,29 @@ public class GroupServiceImpl implements GroupService {
                         .lastname(new ArrayList<>())
                         .profilePhoto(new ArrayList<>())
                         .username(new ArrayList<>())
+                        .longitude(new ArrayList<>())
+                        .latitude(new ArrayList<>())
                         .build();
 
+                if (admin.getLocation() != null && admin.getLocation().getLocationStatus()){
+                    userDTO.getLatitude().add(admin.getLocation().getLatitude());
+                    userDTO.getLongitude().add(admin.getLocation().getLongitude());
+                }else {
+                    userDTO.getLatitude().add(null);
+                    userDTO.getLongitude().add(null);
+                }
                 userDTO.getName().add(admin.getName());
                 userDTO.getLastname().add(admin.getLastName());
                 userDTO.getProfilePhoto().add(admin.getProfilePhotoPath());
                 userDTO.getUsername().add(admin.getUsername());
                 group.getMembers().forEach(member ->{
+                    if (member.getLocation() != null && member.getLocation().getLocationStatus()){
+                        userDTO.getLatitude().add(member.getLocation().getLatitude());
+                        userDTO.getLongitude().add(member.getLocation().getLongitude());
+                    }else {
+                        userDTO.getLatitude().add(null);
+                        userDTO.getLongitude().add(null);
+                    }
                     userDTO.getName().add(member.getName());
                     userDTO.getLastname().add(member.getLastName());
                     userDTO.getProfilePhoto().add(member.getProfilePhotoPath());
