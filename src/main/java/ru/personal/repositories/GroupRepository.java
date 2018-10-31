@@ -1,11 +1,13 @@
 package ru.personal.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.personal.models.Group;
 import ru.personal.models.User;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,9 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     List<Group> findAllByMembersInOrAdmin(@Param("userID") Long userID);
     List<Group> findAllByAdmin(User user);
     Optional<Group> findFirstByGroupIDAndAdmin_Id(Long groupID, Long adminID);
+    @Modifying
+    @Query("delete from Group t where t.groupID = ?1")
+    @Transactional
     void removeByGroupID(Long groupID);
     Optional<Group> findFirstByGroupID(Long groupID);
 }
