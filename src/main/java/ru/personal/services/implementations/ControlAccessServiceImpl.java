@@ -291,6 +291,7 @@ public class ControlAccessServiceImpl implements ControlAccessService {
         return UserProfileDTO
                 .builder()
                 .username(guestProfile.getUsername())
+                .phoneNumber(guestProfile.getPhoneNumber())
                 .name(guestProfile.getName())
                 .lastName(guestProfile.getLastName())
                 .qrImagePath(guestProfile.getQrImagePath())
